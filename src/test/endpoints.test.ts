@@ -18,10 +18,8 @@ describe('API CALLS', () => {
   describe('Entry point should quack', () => {
     test('Entry point', async () => {
       const response = await supertest.get('/');
-      console.log('GetResponse', response);
-
       expect(response.status).toBe(200);
-      // expect(response.body[0].latin).toBe('Aeschynanthus lobianus');
+      expect(response.text).toBe('🦆🦆🦆🦆🦆Quack Quack Quack🦆🦆🦆🦆🦆');
     });
   });
 });
