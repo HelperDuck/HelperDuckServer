@@ -1,5 +1,5 @@
 import express from 'express';
-// import controller from '../controller/controller';
+import * as controller from '../controller/controller';
 
 const router = express.Router();
 
@@ -8,4 +8,12 @@ router.get('/', (req, res) => {
   console.log('server got request');
 });
 
+//PROFILE ROUTES
+router.get('/profile/get/:uid', controller.getUserProfile);
+router.post('/profile/create', controller.postUserProfile);
+router.put('/profile/edit/:uid', controller.editUserProfile);
+
+//REQUEST ROUTES
+router.post('request/post', controller.postRequest);
+router.get('request/get/', controller.getAllIncomingRequests);
 export default router;
