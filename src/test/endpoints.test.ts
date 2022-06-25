@@ -5,6 +5,7 @@ import Cors from 'cors';
 import router from '../router/router';
 
 describe('API CALLS', () => {
+  //No need to set port
   const app = Express();
   app.use(Cors()).use(Express.json());
 
