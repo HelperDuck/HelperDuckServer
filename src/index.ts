@@ -1,14 +1,17 @@
-import Express from "express";
-import DotEnv from "dotenv";
-import Cors from "cors";
+import Express from 'express';
+import morgan from 'morgan';
+import dotenv from 'dotenv';
+dotenv.config();
+import Cors from 'cors';
+import router from './router/router';
+
+const PORT = process.env.PORT || 3002;
 
 const app = Express();
-const port = process.env.PORT || 3002;
+app.use(morgan('dev'));
+app.use(Cors()).use(Express.json());
+app.use(router);
 
-app.get("/", (req, res) => {
-  res.send("Express Server");
-});
-
-app.listen(port, () => {
-  console.log(`[server]: Server is running at https://localhost:${port}`);
+app.listen(PORT, () => {
+  console.log(`🦆🦆🦆 Server is running at http://localhost:${PORT} 🦆🦆🦆`);
 });
