@@ -1,30 +1,27 @@
 import Express, { Request, Response } from 'express';
 
 
-const mockModel = {}
-
-
+const allRequests = {   //mock data
+  "uid":"aadahdZD1",
+  "firstName": "John",
+  "lastName": "Doe",
+  "userName": "jd",
+  "email": "john.doe@abc.com",
+  "userBio": "I am John Doe, Junior Developer based in LA",
+  "profilePic": "http://google.com/",
+  "technologies": "['JavaScript', 'React', 'Redux']",
+  "languages": "['English', 'Spanish']",
+  "gitHubProfile": "https://github.com/johndoe",
+  "openedRequests": "20",
+  "acceptedRequests": "2",
+  "avgTip": "20",
+  "rating": "4.5" 
+ }
 
 //Requests related functions
 
 export async function getAllIncomingRequests(req: Request, res: Response) {
   try {
-    const allRequests = {   //mock data
-      "uid":"aadahdZD1",
-      "firstName": "John",
-      "lastName": "Doe",
-      "userName": "jd",
-      "email": "john.doe@abc.com",
-      "userBio": "I am John Doe, Junior Developer based in LA",
-      "profilePic": "http://google.com/",
-      "technologies": "['JavaScript', 'React', 'Redux']",
-      "languages": "['English', 'Spanish']",
-      "gitHubProfile": "https://github.com/johndoe",
-      "openedRequests": "20",
-      "acceptedRequests": "2",
-      "avgTip": "20",
-      "rating": "4.5" 
-     }
     // let allRequests = await mockModel.find();   //replace for real model
     res.status(200);
     res.send(allRequests);
@@ -50,7 +47,7 @@ export async function postRequest(req: Request, res: Response) {
       technologies,
       roomId
     } = req.body;
-
+    console.log(uid, 'uid')
 
     const result = {   //mock data
       uid,
@@ -65,6 +62,8 @@ export async function postRequest(req: Request, res: Response) {
       technologies,
       roomId
     };
+
+    console.log(result)
 
     // const result = await mockModel.create({      //replace mock model and sintaxe to add into DBase
     //   createdBy,

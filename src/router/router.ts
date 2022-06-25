@@ -8,12 +8,16 @@ router.get('/', (req, res) => {
   console.log('server got request');
 });
 
+
+// everything will be uncommented as soon as fully implemented.
+
+
 //PROFILE ROUTES
-router.get('/profile/get/:uid', controller.getUserProfile);
-router.post('/profile/create', controller.postUserProfile);
-router.put('/profile/edit/:uid', controller.editUserProfile);
+// router.get('/profile/get/:uid', controller.getUserProfile);
+// router.post('/profile/create', controller.postUserProfile);
+// router.put('/profile/edit/:uid', controller.editUserProfile);
 
 //REQUEST ROUTES
-router.post('request/post', controller.postRequest);
-router.get('request/get/', controller.getAllIncomingRequests);
+router.post('/request/post', controller.postRequest);
+// router.get('request/get/', controller.getAllIncomingRequests);
 export default router;
