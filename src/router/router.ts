@@ -13,11 +13,11 @@ router.get('/', (req, res) => {
 
 
 //PROFILE ROUTES
-// router.get('/profile/get/:uid', controller.getUserProfile);
-// router.post('/profile/create', controller.postUserProfile);
+router.get('/profile/get/:uid', controller.getUserProfile);
+router.post('/profile/create', controller.postUserProfile);
 // router.put('/profile/edit/:uid', controller.editUserProfile);
 
 //REQUEST ROUTES
 router.post('/request/post', controller.postRequest);
-// router.get('request/get/', controller.getAllIncomingRequests);
+router.get('/request/get/', controller.getAllIncomingRequests);
 export default router;
