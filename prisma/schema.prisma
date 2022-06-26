@@ -8,9 +8,16 @@ datasource db {
 }
 
 model User {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique @db.VarChar(255)
-  name    String?  @db.VarChar(255)
+  id                Int      @id @default(autoincrement())
+  uid               String?  @unique @db.VarChar(255)
+  email             String   @unique @db.VarChar(255)
+  first_name        String?  @db.VarChar(255)
+  last_name         String?  @db.VarChar(255)
+  bio               String?  
+  github_username   String?  @db.VarChar(255)
+  pictureUrl        String? @db.VarChar(255)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @default(now())
   posts   Post[]
 }
 

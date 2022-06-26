@@ -12,7 +12,7 @@
     "start-dev": "ts-node-dev src/index.ts",
     "build": "tsc && npm run build-db",
     "build-server": "tsc",
-    "build-db": "npx prisma migrate reset -f"
+    "build-db": "npx prisma migrate dev --name ci && npx prisma migrate reset -f"
   },
   "repository": {
     "type": "git",
