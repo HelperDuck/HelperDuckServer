@@ -10,12 +10,14 @@ router.get('/', (req, res) => {
 
 // everything will be uncommented as soon as fully implemented.
 
-//PROFILE ROUTES
+//USER ROUTES
 router.get('/profile/get/:uid', controllers.user.getUserProfile);
 // router.post('/profile/create', controllers.postUserProfile);
 // router.put('/profile/edit/:uid', controller.editUserProfile);
-
 router.get('/user/:uid', controllers.user.getUser);
+
+//PROGRAMLANG ROUTES
+router.get('/programLang', controllers.programLang.getAllprogramLang);
 
 //REQUEST ROUTES
 // router.post('/request/post', controllers.postRequest);
