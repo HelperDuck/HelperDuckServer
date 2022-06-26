@@ -1,6 +1,5 @@
 node_modules
 build
 .env
-migrations
 helperDuckDb.db
 helperDuckDb.db-journal
