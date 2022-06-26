@@ -2,6 +2,10 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator typegraphql {
+  provider = "typegraphql-prisma"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -18,8 +22,25 @@ model User {
   pictureUrl        String? @db.VarChar(255)
   createdAt         DateTime @default(now())
   updatedAt         DateTime @default(now())
-  posts   Post[]
+  posts             Post[]
+  programLangs      UsersToProgramLang[]
 }
+
+model ProgramLang {
+  id                Int       @id @default(autoincrement())
+  name              String    @unique @db.VarChar(255)
+  icon              String  
+  users             UsersToProgramLang[]
+}
+
+model UsersToProgramLang {
+  user                User      @relation(fields: [userId], references: [id])
+  userId              Int
+  programLang         ProgramLang @relation(fields: [programLangId], references: [id])
+  programLangId       Int
+  @@id([userId, programLangId])
+}
+
 
 model Post {
   id        Int      @id @default(autoincrement())
