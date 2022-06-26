@@ -1,10 +1,18 @@
 import { Request, Response } from 'express';
+import { PrismaClient } from '@prisma/client';
+const prisma = new PrismaClient();
 
 export async function getUser(req: Request, res: Response) {
   try {
-    // const user = await mockModel.findById(req.params.uid);  //uncomment and replace mock model and sintaxe to add into DBase
-    const user = req.params.uid; //mock, delete after model and database are done
+    //This is how we can query for users
+    const user = await prisma.user.findUnique({
+      where: {
+        id: parseInt(req.params.uid),
+      },
+    });
+
     res.status(200);
+
     res.send(user);
   } catch (err) {
     console.log('Error at getUserProfile Controller ', err);
