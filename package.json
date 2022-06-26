@@ -10,7 +10,8 @@
     "test": "jest --forceExit",
     "start": "node build/index.js",
     "start-dev": "ts-node-dev src/index.ts",
-    "build": "tsc",
+    "build": "tsc && npm run build-db",
+    "build-server": "tsc",
     "build-db": "npx prisma migrate dev --name init"
   },
   "repository": {
