@@ -9,7 +9,12 @@ export async function getUser(req: Request, res: Response) {
       where: {
         id: parseInt(req.params.uid),
       },
+      include: {
+        programLangs: { include: { programLang: true } },
+      },
     });
+
+    console.log(user);
 
     res.status(200);
 
