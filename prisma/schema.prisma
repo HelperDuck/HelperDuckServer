@@ -1,0 +1,66 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+// generator typegraphql {
+//   provider = "typegraphql-prisma"
+// }
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                Int       @id @default(autoincrement())
+  uid               String    @unique @db.VarChar(255)
+  userName          String    @unique @db.VarChar(255)
+  email             String    @unique @db.VarChar(255)
+  firstName         String?   @db.VarChar(255)
+  lastName          String?   @db.VarChar(255)
+  userBio           String?  
+  gitHubProfile     String?   @db.VarChar(255)
+  profilePic        String    @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
+  technologies      UsersToTechnologies[]
+  languages         UsersToLanguages[]
+//  Will come from Query of other tables:
+//  "openedRequests": "20",
+//  "acceptedRequests": "2",
+//  "avgTip": "20",
+//  "rating": "4.5" 
+          
+}
+
+model Technology {
+  id                Int       @id @default(autoincrement())
+  name              String    @unique @db.VarChar(255)
+  icon              String?  
+  users             UsersToTechnologies[]
+}
+
+model UsersToTechnologies{
+  user                User      @relation(fields: [userId], references: [id])
+  userId              Int
+  technology          Technology @relation(fields: [technologyId], references: [id])
+  technologyId       Int
+  @@id([userId, technologyId])
+}
+
+model Language {
+  id                Int       @id @default(autoincrement())
+  code              String    @unique @db.VarChar(8)
+  name              String    @unique @db.VarChar(255)
+  nativeName        String?   @db.VarChar(255)
+  icon              String?
+  users             UsersToLanguages[]  
+}
+
+model UsersToLanguages {
+  user                User      @relation(fields: [userId], references: [id])
+  userId              Int
+  language            Language  @relation(fields: [languageId], references: [id])
+  languageId          Int
+  @@id([userId, languageId])
+}
