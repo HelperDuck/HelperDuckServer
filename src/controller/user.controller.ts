@@ -11,6 +11,7 @@ export async function getUser(req: Request, res: Response) {
       },
       include: {
         programLangs: { include: { programLang: true } },
+        languages: { include: { language: true } },
       },
     });
 

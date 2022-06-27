@@ -16,8 +16,9 @@ router.get('/profile/get/:uid', controllers.user.getUserProfile);
 // router.put('/profile/edit/:uid', controller.editUserProfile);
 router.get('/user/:uid', controllers.user.getUser);
 
-//PROGRAMLANG ROUTES
-router.get('/programLang', controllers.programLang.getAllprogramLang);
+//Languages
+router.get('/programLang', controllers.programLang.getAllProgramLang);
+router.get('/languages/', controllers.languages.getAllLanguages);
 
 //REQUEST ROUTES
 // router.post('/request/post', controllers.postRequest);

@@ -11,8 +11,7 @@ export async function seedLanguages() {
       data: {
         code: language.code,
         name: language.name,
-        // icon: "https://www.countryflags.io/" + language.code + "/flat/64.png",
-        icon: 'test',
+        icon: `https://countryflagsapi.com/png/${language.code}`,
         nativeName: language.nativeName,
       },
     });

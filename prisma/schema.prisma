@@ -47,6 +47,7 @@ model Language {
   code              String    @unique @db.VarChar(8)
   name              String    @unique @db.VarChar(255)
   nativeName        String?   @db.VarChar(255)
+  icon              String?
   users             UsersToLanguages[]  
 }
 

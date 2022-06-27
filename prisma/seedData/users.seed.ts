@@ -12,7 +12,10 @@ const userData: Prisma.UserCreateInput[] = [
     githubUsername: 'siebekylstra',
     pictureUrl: null,
     programLangs: {
-      create: [{ programLang: { connect: { name: 'Java' } } }],
+      create: [
+        { programLang: { connect: { name: 'Java' } } },
+        { programLang: { connect: { name: 'Python' } } },
+      ],
     },
     languages: {
       create: [
