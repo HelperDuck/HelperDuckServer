@@ -6,9 +6,9 @@ CREATE TABLE "User" (
     "email" VARCHAR(255) NOT NULL,
     "firstName" VARCHAR(255),
     "lastName" VARCHAR(255),
-    "bio" TEXT,
-    "githubUsername" VARCHAR(255),
-    "pictureUrl" VARCHAR(255),
+    "userBio" TEXT,
+    "gitHubProfile" VARCHAR(255),
+    "profilePic" TEXT NOT NULL DEFAULT E'https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -16,20 +16,20 @@ CREATE TABLE "User" (
 );
 
 -- CreateTable
-CREATE TABLE "ProgramLang" (
+CREATE TABLE "Technology" (
     "id" SERIAL NOT NULL,
     "name" VARCHAR(255) NOT NULL,
-    "icon" TEXT NOT NULL,
+    "icon" TEXT,
 
-    CONSTRAINT "ProgramLang_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Technology_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "UsersToProgramLang" (
+CREATE TABLE "UsersToTechnologies" (
     "userId" INTEGER NOT NULL,
-    "programLangId" INTEGER NOT NULL,
+    "technologyId" INTEGER NOT NULL,
 
-    CONSTRAINT "UsersToProgramLang_pkey" PRIMARY KEY ("userId","programLangId")
+    CONSTRAINT "UsersToTechnologies_pkey" PRIMARY KEY ("userId","technologyId")
 );
 
 -- CreateTable
@@ -38,6 +38,7 @@ CREATE TABLE "Language" (
     "code" VARCHAR(8) NOT NULL,
     "name" VARCHAR(255) NOT NULL,
     "nativeName" VARCHAR(255),
+    "icon" TEXT,
 
     CONSTRAINT "Language_pkey" PRIMARY KEY ("id")
 );
@@ -60,7 +61,7 @@ CREATE UNIQUE INDEX "User_userName_key" ON "User"("userName");
 CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "ProgramLang_name_key" ON "ProgramLang"("name");
+CREATE UNIQUE INDEX "Technology_name_key" ON "Technology"("name");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Language_code_key" ON "Language"("code");
@@ -69,10 +70,10 @@ CREATE UNIQUE INDEX "Language_code_key" ON "Language"("code");
 CREATE UNIQUE INDEX "Language_name_key" ON "Language"("name");
 
 -- AddForeignKey
-ALTER TABLE "UsersToProgramLang" ADD CONSTRAINT "UsersToProgramLang_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UsersToTechnologies" ADD CONSTRAINT "UsersToTechnologies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "UsersToProgramLang" ADD CONSTRAINT "UsersToProgramLang_programLangId_fkey" FOREIGN KEY ("programLangId") REFERENCES "ProgramLang"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "UsersToTechnologies" ADD CONSTRAINT "UsersToTechnologies_technologyId_fkey" FOREIGN KEY ("technologyId") REFERENCES "Technology"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "UsersToLanguages" ADD CONSTRAINT "UsersToLanguages_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
