@@ -1,19 +1,13 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function deleteAndUpdateUsersToTechnologies(
-  technologies: any,
-  id: number
-) {
+export async function getAllProgramLang() {
   try {
-    await deleteUsersToTechnologies(id);
-    const technologiesUpdated = await updateUsersToTechnologies(
-      technologies,
-      id
-    );
-    return technologiesUpdated;
+    const allProgramLang = await prisma.technology.findMany();
+    return allProgramLang;
   } catch (err) {
-    console.log('Error at updateTechnologies Controller', err);
+    console.log('Error at Model-getAllTechnologies', err);
+    return null;
   }
 }
 
@@ -31,7 +25,7 @@ export async function deleteUsersToTechnologies(id: number) {
   }
 }
 
-export async function updateUsersToTechnologies(technologies: any, id: number) {
+export async function createUsersToTechnologies(technologies: any, id: number) {
   try {
     const technologiesUpdated = await prisma.user.update({
       where: {

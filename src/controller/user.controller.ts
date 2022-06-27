@@ -78,10 +78,8 @@ export async function updateUser(req: Request, res: Response) {
 
     //Update technologies
     if (technologies) {
-      model.technologies.deleteAndUpdateUsersToTechnologies(
-        technologies,
-        user.id
-      );
+      await model.technologies.deleteUsersToTechnologies(user.id);
+      await model.technologies.createUsersToTechnologies(technologies, user.id);
     }
 
     res.status(200);
