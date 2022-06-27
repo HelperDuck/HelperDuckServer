@@ -1,10 +1,10 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function getAllProgramLang() {
+export async function getAllTechnologies() {
   try {
-    const allProgramLang = await prisma.technology.findMany();
-    return allProgramLang;
+    const allTechnologies = await prisma.technology.findMany();
+    return allTechnologies;
   } catch (err) {
     console.log('Error at Model-getAllTechnologies', err);
     return null;
@@ -13,7 +13,7 @@ export async function getAllProgramLang() {
 
 export async function deleteUsersToTechnologies(id: number) {
   try {
-    await prisma.usersToTechnologies.deleteMany({
+    return await prisma.usersToTechnologies.deleteMany({
       where: {
         user: {
           id: id,
@@ -21,13 +21,14 @@ export async function deleteUsersToTechnologies(id: number) {
       },
     });
   } catch (err) {
-    console.log('Error at deleteTechnologies Controller', err);
+    console.log('Error at deleteTechnologies model', err);
+    return null;
   }
 }
 
 export async function createUsersToTechnologies(technologies: any, id: number) {
   try {
-    const technologiesUpdated = await prisma.user.update({
+    return await prisma.user.update({
       where: {
         id: id,
       },
@@ -39,9 +40,8 @@ export async function createUsersToTechnologies(technologies: any, id: number) {
         },
       },
     });
-    return technologiesUpdated;
   } catch (err) {
     console.log('Error at updateUsersToTechnologies Model', err);
-    // throw new Error(err);
+    return null;
   }
 }
