@@ -8,13 +8,12 @@ const userData: Prisma.UserCreateInput[] = [
     email: 'siebe.kylstra@gmail.com',
     firstName: 'Siebe',
     lastName: 'Kylstra',
-    bio: 'DevOps nerd',
-    githubUsername: 'siebekylstra',
-    pictureUrl: null,
-    programLangs: {
+    userBio: 'DevOps nerd',
+    gitHubProfile: 'siebekylstra',
+    technologies: {
       create: [
-        { programLang: { connect: { name: 'Java' } } },
-        { programLang: { connect: { name: 'Python' } } },
+        { technology: { connect: { name: 'Java' } } },
+        { technology: { connect: { name: 'Python' } } },
       ],
     },
     languages: {

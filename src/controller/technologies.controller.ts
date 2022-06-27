@@ -4,7 +4,7 @@ const prisma = new PrismaClient();
 
 export async function getAllProgramLang(req: Request, res: Response) {
   try {
-    const allProgramLang = await prisma.programLang.findMany();
+    const allProgramLang = await prisma.technology.findMany();
     res.send(allProgramLang);
   } catch (err) {
     console.log('Error at getAllProgramLang Controller', err);

@@ -18,28 +18,34 @@ model User {
   email             String    @unique @db.VarChar(255)
   firstName         String?   @db.VarChar(255)
   lastName          String?   @db.VarChar(255)
-  bio               String?  
-  githubUsername    String?   @db.VarChar(255)
-  pictureUrl        String?   @db.VarChar(255)
+  userBio           String?  
+  gitHubProfile     String?   @db.VarChar(255)
+  profilePic        String    @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
   createdAt         DateTime  @default(now())
   updatedAt         DateTime  @default(now())
-  programLangs      UsersToProgramLang[]
-  languages         UsersToLanguages[]        
+  technologies      UsersToTechnologies[]
+  languages         UsersToLanguages[]
+//  Will come from Query of other tables:
+//  "openedRequests": "20",
+//  "acceptedRequests": "2",
+//  "avgTip": "20",
+//  "rating": "4.5" 
+          
 }
 
-model ProgramLang {
+model Technology {
   id                Int       @id @default(autoincrement())
   name              String    @unique @db.VarChar(255)
   icon              String?  
-  users             UsersToProgramLang[]
+  users             UsersToTechnologies[]
 }
 
-model UsersToProgramLang {
+model UsersToTechnologies{
   user                User      @relation(fields: [userId], references: [id])
   userId              Int
-  programLang         ProgramLang @relation(fields: [programLangId], references: [id])
-  programLangId       Int
-  @@id([userId, programLangId])
+  technology          Technology @relation(fields: [technologyId], references: [id])
+  technologyId       Int
+  @@id([userId, technologyId])
 }
 
 model Language {

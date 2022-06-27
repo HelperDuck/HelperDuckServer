@@ -1,6 +1,6 @@
 import { PrismaClient, Prisma } from '@prisma/client';
 import { seedUsers } from './seedData/users.seed';
-import { seedProgramLang } from './seedData/programLanguages.seed';
+import { seedTechnologies } from './seedData/technologies.seed';
 import { seedLanguages } from './seedData/languages.seed';
 
 const prisma = new PrismaClient();
@@ -8,7 +8,7 @@ const prisma = new PrismaClient();
 async function main() {
   console.log(`Start seeding ...`);
 
-  await seedProgramLang();
+  await seedTechnologies();
   await seedLanguages();
   await seedUsers();
 

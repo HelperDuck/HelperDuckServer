@@ -4,22 +4,32 @@ const prisma = new PrismaClient();
 
 export async function getUser(req: Request, res: Response) {
   try {
+    // search by param but if empty look in header for id
+    const uid = req.params.uid;
+
     //This is how we can query for users
     const user = await prisma.user.findUnique({
       where: {
-        id: parseInt(req.params.uid),
+        uid: uid,
       },
       include: {
-        programLangs: { include: { programLang: true } },
+        technologies: { include: { technology: true } },
         languages: { include: { language: true } },
       },
     });
 
-    console.log(user);
+    //Added fields but needs to be queried for
+    const userComplete = {
+      ...user,
+      openedRequests: 20,
+      acceptedRequests: 2,
+      avgTip: 20.21,
+      rating: 4.5,
+    };
 
     res.status(200);
 
-    res.send(user);
+    res.send(userComplete);
   } catch (err) {
     console.log('Error at getUserProfile Controller ', err);
     res.sendStatus(400);
