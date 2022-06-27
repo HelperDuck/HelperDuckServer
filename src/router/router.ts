@@ -4,7 +4,7 @@ import controllers from '../controller/index';
 const router = express.Router();
 
 router.get('/', (req, res) => {
-  res.send('🦆🦆🦆🦆🦆Quack Quack Quack Quack🦆🦆🦆🦆🦆');
+  res.send('🦆🦆🦆🦆🦆Quack Quack Quack🦆🦆🦆🦆🦆');
   console.log('server got request');
 });
 
