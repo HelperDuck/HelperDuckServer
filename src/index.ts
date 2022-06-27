@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 import Cors from 'cors';
 import router from './router/router';
+import http from 'http';
 
 const PORT = process.env.PORT || 3002;
 
@@ -12,7 +13,9 @@ app.use(morgan('dev'));
 app.use(Cors()).use(Express.json());
 app.use(router);
 
-app.listen(PORT, () => {
+const server = http.createServer(app);
+
+server.listen(PORT, () => {
   console.log(`🦆🦆🦆 Server is running at http://localhost:${PORT} 🦆🦆🦆`);
 });
 
