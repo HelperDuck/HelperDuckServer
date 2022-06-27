@@ -4,32 +4,41 @@ import dotenv from 'dotenv';
 dotenv.config();
 import cors from 'cors';
 import router from './router/router';
-import http from 'http';
-import { Server } from 'socket.io';
-
+import { createServer } from "http";
+import { Server, Socket } from "socket.io";
 const PORT = process.env.PORT || 3002;
 
 const app = Express();
 app.use(morgan('dev'));
-app.use(cors()).use(Express.json());
+app.use(cors());
+app.use(Express.json());
 app.use(router);
 
 //HTTP server
-const server = http.createServer(app);
+const httpServer = createServer(app);
 //Websocket server
-const io = new Server(server, {
+const io = new Server(httpServer, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
-io.on("connection", () => {
-  console.log('user is connected')
+
+io.on('connection', (socket: any) => {
+  console.log(`user is connected: ${socket.id}`);
+
+  socket.on('disconnect', () => {
+    console.log(`Client disconnected`);
+  })
 })
 
 
-server.listen(PORT, () => {
+httpServer.listen(PORT, () => {
+  try {
   console.log(`🦆🦆🦆 Server is running at http://localhost:${PORT} 🦆🦆🦆`);
+  } catch(err) {
+    console.log('Error launching Server: ', err);
+  }
 });
 
 export default app;
