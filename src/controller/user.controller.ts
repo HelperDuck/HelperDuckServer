@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { PrismaClient, Technology, UsersToTechnologies } from '@prisma/client';
+import controllers from '../controller/index';
+
 const prisma = new PrismaClient();
 
 export async function getUser(req: Request, res: Response) {
@@ -34,6 +36,56 @@ export async function getUser(req: Request, res: Response) {
     res.send(userComplete);
   } catch (err) {
     console.log('Error at getUserProfile Controller ', err);
+    res.sendStatus(400);
+  }
+}
+
+export async function updateUser(req: Request, res: Response) {
+  try {
+    const uid = req.params.uid;
+    const user = await prisma.user.findUnique({
+      where: {
+        uid: uid,
+      },
+    });
+
+    if (!user) return res.status(404).send('User not found');
+
+    const userUnnesstted = req.body;
+
+    //Because these are nested they need to be removed before updating
+    const technologies = userUnnesstted.technologies;
+    const languages = userUnnesstted.languages;
+    delete userUnnesstted.technologies;
+    delete userUnnesstted.languages;
+
+    console.log(technologies);
+
+    const userUpdate = {
+      ...user,
+      ...userUnnesstted,
+    };
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        uid: uid,
+      },
+      data: userUpdate,
+    });
+
+    //Update technologies
+    console.log(technologies);
+    if (technologies)
+      controllers.technologies.updateUserTechnologiesFunc(
+        technologies,
+        user.id
+      );
+    // if (technologies) console.log('technologies need to be updated');
+
+    res.status(200);
+    res.send(updatedUser);
+  } catch (err) {
+    console.log('Error at updateUser Controller ', err);
     res.sendStatus(400);
   }
 }

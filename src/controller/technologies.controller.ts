@@ -7,7 +7,81 @@ export async function getAllProgramLang(req: Request, res: Response) {
     const allProgramLang = await prisma.technology.findMany();
     res.send(allProgramLang);
   } catch (err) {
-    console.log('Error at getAllProgramLang Controller', err);
+    console.log('Error at getAllTechnologies Controller', err);
+    res.sendStatus(400);
+  }
+}
+
+export async function updateUserTechnologiesFunc(
+  technologies: any,
+  id: number
+) {
+  try {
+    await prisma.usersToTechnologies.deleteMany({
+      where: {
+        user: {
+          id: id,
+        },
+      },
+    });
+
+    const technologiesUpdated = await prisma.user.update({
+      where: {
+        id: id,
+      },
+      data: {
+        technologies: {
+          create: technologies.map((tech: any) => {
+            return { technology: { connect: { name: tech.technology.name } } };
+          }),
+        },
+      },
+    });
+
+    return technologiesUpdated;
+  } catch (err) {
+    console.log('Error at updateTechnologies Controller', err);
+  }
+}
+
+export async function updateUserTechnologies(req: Request, res: Response) {
+  console.log('started updateUserTechnologies');
+  try {
+    const uid = req.params.uid;
+    const technologies = req.body.technologies;
+
+    const user = await prisma.user.findUnique({
+      where: {
+        uid: uid,
+      },
+    });
+
+    if (!user) return res.status(404).send('User not found');
+
+    await prisma.usersToTechnologies.deleteMany({
+      where: {
+        user: {
+          id: user.id,
+        },
+      },
+    });
+
+    const technologiesUpdated = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        technologies: {
+          create: technologies.map((tech: any) => {
+            return { technology: { connect: { name: tech.technology.name } } };
+          }),
+        },
+      },
+    });
+
+    res.send(technologiesUpdated);
+  } catch (err) {
+    console.log('Error at updateTechnologies Controller', err);
     res.sendStatus(400);
   }
 }

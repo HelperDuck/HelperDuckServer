@@ -14,9 +14,17 @@ router.get('/', (req, res) => {
 router.get('/user/:uid', controllers.user.getUser);
 router.post('/user', controllers.user.createNewUser);
 router.delete('/user/:uid', controllers.user.deleteUser);
+router.put('/user/:uid', controllers.user.updateUser);
+
+//Update technologies and languages
+router.post(
+  '/user/:uid/technologies',
+  controllers.technologies.updateUserTechnologies
+);
+// router.post('/user/:uid/languages', controllers.user.updateLanguages);
 
 //Languages
-router.get('/programLang', controllers.programLang.getAllProgramLang);
+router.get('/technologies', controllers.technologies.getAllProgramLang);
 router.get('/languages', controllers.languages.getAllLanguages);
 
 //REQUEST ROUTES
