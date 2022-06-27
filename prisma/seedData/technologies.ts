@@ -1,4 +1,4 @@
-export const ProgrammingLanguages = {
+export const technologies = {
   AdonisJS:
     'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/adonisjs/adonisjs-original.svg',
   'After Effects':
