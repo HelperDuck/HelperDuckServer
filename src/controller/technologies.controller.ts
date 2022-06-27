@@ -12,38 +12,6 @@ export async function getAllProgramLang(req: Request, res: Response) {
   }
 }
 
-export async function updateUserTechnologiesFunc(
-  technologies: any,
-  id: number
-) {
-  try {
-    await prisma.usersToTechnologies.deleteMany({
-      where: {
-        user: {
-          id: id,
-        },
-      },
-    });
-
-    const technologiesUpdated = await prisma.user.update({
-      where: {
-        id: id,
-      },
-      data: {
-        technologies: {
-          create: technologies.map((tech: any) => {
-            return { technology: { connect: { name: tech.technology.name } } };
-          }),
-        },
-      },
-    });
-
-    return technologiesUpdated;
-  } catch (err) {
-    console.log('Error at updateTechnologies Controller', err);
-  }
-}
-
 export async function updateUserTechnologies(req: Request, res: Response) {
   console.log('started updateUserTechnologies');
   try {

@@ -1,15 +1,18 @@
 import { Request, Response } from 'express';
 import { PrismaClient, Technology, UsersToTechnologies } from '@prisma/client';
-import controllers from '../controller/index';
+import model from '../model/index';
 
 const prisma = new PrismaClient();
 
 export async function getUser(req: Request, res: Response) {
+  const uid = req.params.uid;
+  if (!uid) return res.status(400).send('No uid provided');
+
   try {
     // search by param but if empty look in header for id
     const uid = req.params.uid;
 
-    //This is how we can query for users
+    //To model
     const user = await prisma.user.findUnique({
       where: {
         uid: uid,
@@ -74,13 +77,12 @@ export async function updateUser(req: Request, res: Response) {
     });
 
     //Update technologies
-    console.log(technologies);
-    if (technologies)
-      controllers.technologies.updateUserTechnologiesFunc(
+    if (technologies) {
+      model.technologies.deleteAndUpdateUsersToTechnologies(
         technologies,
         user.id
       );
-    // if (technologies) console.log('technologies need to be updated');
+    }
 
     res.status(200);
     res.send(updatedUser);
