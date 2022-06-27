@@ -12,18 +12,19 @@ datasource db {
 }
 
 model User {
-  id                Int      @id @default(autoincrement())
-  uid               String?  @unique @db.VarChar(255)
-  email             String   @unique @db.VarChar(255)
-  first_name        String?  @db.VarChar(255)
-  last_name         String?  @db.VarChar(255)
+  id                Int       @id @default(autoincrement())
+  uid               String    @unique @db.VarChar(255)
+  userName          String    @unique @db.VarChar(255)
+  email             String    @unique @db.VarChar(255)
+  firstName         String?   @db.VarChar(255)
+  lastName          String?   @db.VarChar(255)
   bio               String?  
-  github_username   String?  @db.VarChar(255)
-  pictureUrl        String? @db.VarChar(255)
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @default(now())
-  posts             Post[]
+  githubUsername    String?   @db.VarChar(255)
+  pictureUrl        String?   @db.VarChar(255)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @default(now())
   programLangs      UsersToProgramLang[]
+  languages         UsersToLanguages[]        
 }
 
 model ProgramLang {
@@ -41,15 +42,18 @@ model UsersToProgramLang {
   @@id([userId, programLangId])
 }
 
+model Language {
+  id                Int       @id @default(autoincrement())
+  code              String    @unique @db.VarChar(8)
+  name              String    @unique @db.VarChar(255)
+  nativeName        String?   @db.VarChar(255)
+  users             UsersToLanguages[]  
+}
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  viewCount Int      @default(0)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
+model UsersToLanguages {
+  user                User      @relation(fields: [userId], references: [id])
+  userId              Int
+  language            Language  @relation(fields: [languageId], references: [id])
+  languageId          Int
+  @@id([userId, languageId])
 }
