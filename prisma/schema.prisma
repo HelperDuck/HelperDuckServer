@@ -30,7 +30,7 @@ model User {
 model ProgramLang {
   id                Int       @id @default(autoincrement())
   name              String    @unique @db.VarChar(255)
-  icon              String  
+  icon              String?  
   users             UsersToProgramLang[]
 }
 

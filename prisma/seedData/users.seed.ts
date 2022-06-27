@@ -2,23 +2,25 @@ import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
 const userData: Prisma.UserCreateInput[] = [
-  // {
-  //   uid: 'jcLzJnBP2mZnKA53NhpYmp3gpkl1',
-  //   userName: 'Siebe',
-  //   email
-  //   firstName
-  //   lastName
-  //   bio
-  //   githubUsername
-  //   pictureUrl
-  //   createdAt
-  //   updatedAt
-  //   programLangs
-  //   languages
-  //   programLangs: {
-  //     create: [{ programLang: { connect: { name: 'Java' } } }],
-  //   },
-  // },
+  {
+    uid: 'jcLzJnBP2mZnKA53NhpYmp3gpkl1',
+    userName: 'Siebe',
+    email: 'siebe.kylstra@gmail.com',
+    firstName: 'Siebe',
+    lastName: 'Kylstra',
+    bio: 'DevOps nerd',
+    githubUsername: 'siebekylstra',
+    pictureUrl: null,
+    programLangs: {
+      create: [{ programLang: { connect: { name: 'Java' } } }],
+    },
+    languages: {
+      create: [
+        { language: { connect: { code: 'en' } } },
+        { language: { connect: { code: 'nl' } } },
+      ],
+    },
+  },
 ];
 
 export async function seedUsers() {
