@@ -25,7 +25,7 @@ export async function getUser(req: Request, res: Response) {
   }
 }
 
-//User related. Test for build //test for build
+//User related. Test for build // test
 export async function postUserProfile(req: Request, res: Response) {
   try {
     const {
