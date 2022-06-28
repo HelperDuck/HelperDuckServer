@@ -78,10 +78,10 @@ model HelpRequest {
   updatedAt     DateTime                  @default(now())
   status        String                    @default("open") @db.VarChar(16)
   subject       String                    @db.VarChar(255)
-  description   String?
-  codeSnippet   String?
-  linkToSandbox String?                   @db.VarChar(255)
-  roomId        String?                   @db.VarChar(255)
+  description   String?                   @default("")
+  codeSnippet   String?                   @default("")
+  linkToSandbox String?                   @default("") @db.VarChar(255)
+  roomId        String?                   @default("") @db.VarChar(255)
   technologies  HelpRequestsToTech[]
   languages     HelpRequestsToLanguages[]
   helpOffers    HelpOffer[]
@@ -114,7 +114,7 @@ model HelpSession {
 }
 
 model HelpRequestsToTech {
-  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
   helpRequestId Int
   technology    Technology  @relation(fields: [technologyId], references: [id])
   technologyId  Int

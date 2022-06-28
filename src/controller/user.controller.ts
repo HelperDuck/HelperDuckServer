@@ -1,6 +1,12 @@
 import { Request, Response } from 'express';
 import model from '../model/index';
 
+export async function getAllUsers(req: Request, res: Response) {
+  const users = await model.user.getAllUsers();
+  if (!users) return res.status(400).send('Error getting users');
+  return res.status(200).send(users);
+}
+
 export async function getUser(req: Request, res: Response) {
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
@@ -15,7 +21,7 @@ export async function updateUser(req: Request, res: Response) {
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
 
-  const user = await model.user.findUniqueUser(uid);
+  const user = await model.user.findUniqueUser({ uid });
   if (!user) return res.status(404).send('User not found');
 
   const userUnnested = req.body;
@@ -68,7 +74,7 @@ export async function createNewUser(req: Request, res: Response) {
   }
 
   //Check if no unique fields are double
-  const userExists = await model.user.findUniqueUser(uid, userName, email);
+  const userExists = await model.user.findUniqueUser({ uid, userName, email });
   if (userExists) return res.status(400).send('User already exists');
 
   //Because these are nested they need to be removed before updating
@@ -107,7 +113,7 @@ export async function deleteUser(req: Request, res: Response) {
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
 
-  const user = await model.user.findUniqueUser(uid);
+  const user = await model.user.findUniqueUser({ uid });
   if (!user) return res.status(404).send('User not found');
 
   const deleteTech = await model.technology.deleteUsersToTechnologies(user.id);

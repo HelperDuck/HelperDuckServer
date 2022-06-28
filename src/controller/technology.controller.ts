@@ -14,7 +14,7 @@ export async function updateUserTechnologies(req: Request, res: Response) {
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
 
-  const user = await model.user.findUniqueUser(uid);
+  const user = await model.user.findUniqueUser({ uid });
   if (!user) return res.status(404).send('User not found');
 
   const deletedTech = await model.technology.deleteUsersToTechnologies(user.id);
