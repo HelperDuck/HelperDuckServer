@@ -18,17 +18,17 @@ export async function updateUser(req: Request, res: Response) {
   const user = await model.user.findUniqueUser(uid);
   if (!user) return res.status(404).send('User not found');
 
-  const userUnnesstted = req.body;
+  const userUnnested = req.body;
 
   //Because these are nested they need to be removed before updating
-  const technologies = userUnnesstted.technologies;
-  const languages = userUnnesstted.languages;
-  delete userUnnesstted.technologies;
-  delete userUnnesstted.languages;
+  const technologies = userUnnested.technologies;
+  const languages = userUnnested.languages;
+  delete userUnnested.technologies;
+  delete userUnnested.languages;
 
   const userUpdate = {
     ...user,
-    ...userUnnesstted,
+    ...userUnnested,
   };
 
   const updateRes = await model.user.updateUser(userUpdate);
@@ -67,18 +67,18 @@ export async function createNewUser(req: Request, res: Response) {
       );
   }
 
-  //Check if no unqiue fields are double
+  //Check if no unique fields are double
   const userExists = await model.user.findUniqueUser(uid, userName, email);
   if (userExists) return res.status(400).send('User already exists');
 
   //Because these are nested they need to be removed before updating
-  const userUnnesstted = req.body;
-  const technologies = userUnnesstted.technologies;
-  const languages = userUnnesstted.languages;
-  delete userUnnesstted.technologies;
-  delete userUnnesstted.languages;
+  const userUnnested = req.body;
+  const technologies = userUnnested.technologies;
+  const languages = userUnnested.languages;
+  delete userUnnested.technologies;
+  delete userUnnested.languages;
 
-  const newUser = await model.user.createUser(userUnnesstted);
+  const newUser = await model.user.createUser(userUnnested);
   if (!newUser) return res.status(400).send('Error creating user');
 
   //Update technologies
@@ -99,8 +99,8 @@ export async function createNewUser(req: Request, res: Response) {
     if (!newLang) return res.status(400).send('Error creating languages');
   }
 
-  const newUserCompleet = await model.user.findUserComplete(newUser.uid);
-  return res.status(200).send(newUserCompleet);
+  const newUserComplete = await model.user.findUserComplete(newUser.uid);
+  return res.status(200).send(newUserComplete);
 }
 
 export async function deleteUser(req: Request, res: Response) {

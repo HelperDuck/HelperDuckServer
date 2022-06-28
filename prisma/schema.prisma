@@ -25,7 +25,7 @@ model User {
   updatedAt     DateTime              @default(now())
   technologies  UsersToTechnologies[]
   languages     UsersToLanguages[]
-  requests      Request[]
+  requests      HelpRequest[]
   helpOffers    HelpOffer[]
   //  Will come from Query of other tables:
   //  "openedRequests": "20",
@@ -39,7 +39,7 @@ model Technology {
   name     String                @unique @db.VarChar(255)
   icon     String?
   users    UsersToTechnologies[]
-  requests RequestsToTech[]
+  requests HelpRequestsToTech[]
 }
 
 model UsersToTechnologies {
@@ -52,13 +52,13 @@ model UsersToTechnologies {
 }
 
 model Language {
-  id            Int                   @id @default(autoincrement())
-  code          String                @unique @db.VarChar(8)
-  name          String                @unique @db.VarChar(255)
-  nativeName    String?               @db.VarChar(255)
+  id            Int                       @id @default(autoincrement())
+  code          String                    @unique @db.VarChar(8)
+  name          String                    @unique @db.VarChar(255)
+  nativeName    String?                   @db.VarChar(255)
   icon          String?
   users         UsersToLanguages[]
-  requestsAsked RequestsToLanguages[]
+  requestsAsked HelpRequestsToLanguages[]
 }
 
 model UsersToLanguages {
@@ -70,20 +70,20 @@ model UsersToLanguages {
   @@id([userId, languageId])
 }
 
-model Request {
-  id            Int                   @id @default(autoincrement())
-  user          User                  @relation(fields: [userId], references: [id])
+model HelpRequest {
+  id            Int                       @id @default(autoincrement())
+  user          User                      @relation(fields: [userId], references: [id])
   userId        Int
-  createdAt     DateTime              @default(now())
-  updatedAt     DateTime              @default(now())
-  status        String                @default("open") @db.VarChar(16)
-  subject       String                @db.VarChar(255)
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @default(now())
+  status        String                    @default("open") @db.VarChar(16)
+  subject       String                    @db.VarChar(255)
   description   String?
   codeSnippet   String?
-  linkToSandbox String?               @db.VarChar(255)
-  roomId        String?               @db.VarChar(255)
-  technologies  RequestsToTech[]
-  languages     RequestsToLanguages[]
+  linkToSandbox String?                   @db.VarChar(255)
+  roomId        String?                   @db.VarChar(255)
+  technologies  HelpRequestsToTech[]
+  languages     HelpRequestsToLanguages[]
   helpOffers    HelpOffer[]
   helpSession   HelpSession?
 
@@ -95,38 +95,38 @@ model HelpOffer {
   createdAt     DateTime     @default(now())
   updatedAt     DateTime     @default(now())
   userId        Int
-  request       Request      @relation(fields: [requestId], references: [id])
-  requestId     Int
+  request       HelpRequest  @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
   helpSession   HelpSession?
   helpSessionId Int?
   status        String?
 }
 
 model HelpSession {
-  id          Int       @id @default(autoincrement())
-  Request     Request   @relation(fields: [requestId], references: [id])
-  requestId   Int       @unique
-  HelpOffer   HelpOffer @relation(fields: [helpOfferId], references: [id])
-  helpOfferId Int       @unique
-  startTime   DateTime  @default(now())
-  endTime     DateTime?
-  duration    Int
+  id            Int         @id @default(autoincrement())
+  Request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int         @unique
+  HelpOffer     HelpOffer   @relation(fields: [helpOfferId], references: [id])
+  helpOfferId   Int         @unique
+  startTime     DateTime    @default(now())
+  endTime       DateTime?
+  duration      Int
 }
 
-model RequestsToTech {
-  request      Request    @relation(fields: [requestId], references: [id])
-  requestId    Int
-  technology   Technology @relation(fields: [technologyId], references: [id])
-  technologyId Int
+model HelpRequestsToTech {
+  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
+  technology    Technology  @relation(fields: [technologyId], references: [id])
+  technologyId  Int
 
-  @@id([requestId, technologyId])
+  @@id([helpRequestId, technologyId])
 }
 
-model RequestsToLanguages {
-  request    Request  @relation(fields: [requestId], references: [id])
-  requestId  Int
-  language   Language @relation(fields: [languageId], references: [id])
-  languageId Int
+model HelpRequestsToLanguages {
+  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
+  language      Language    @relation(fields: [languageId], references: [id])
+  languageId    Int
 
-  @@id([requestId, languageId])
+  @@id([helpRequestId, languageId])
 }
