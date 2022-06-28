@@ -7,6 +7,7 @@ export async function getAllRequests() {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
+        user: true,
       },
     });
     return requests;
@@ -25,6 +26,7 @@ export async function getRequestById(id: number) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
+        user: true,
       },
     });
     return request;
