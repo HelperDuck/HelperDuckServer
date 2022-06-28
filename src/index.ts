@@ -34,6 +34,7 @@ io.on('connection', (socket: any) => {
   socket.emit('me', socket.id);
   
   socket.on('joiningRoom', (roomId: string) => {
+    console.log(roomId, 'roooomID');
     if (participants[roomId]) {
       participants[roomId].push(socket.id);
     } else {
