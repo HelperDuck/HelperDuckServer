@@ -34,19 +34,19 @@ export async function createRequest(req: Request, res: Response) {
   if (!user) return res.status(404).send('User not found');
 
   //Because these are nested they need to be removed before updating
-  const helRequestUnnested = req.body;
-  const technologies = helRequestUnnested.technologies;
-  const languages = helRequestUnnested.languages;
-  delete helRequestUnnested.technologies;
-  delete helRequestUnnested.languages;
+  const helpRequestUnnested = req.body;
+  const technologies = helpRequestUnnested.technologies;
+  const languages = helpRequestUnnested.languages;
+  delete helpRequestUnnested.technologies;
+  delete helpRequestUnnested.languages;
 
   const helpRequestCreated = await model.request.createHelpRequest(
-    helRequestUnnested
+    helpRequestUnnested
   );
   if (!helpRequestCreated)
     return res.status(400).send('Error creating request');
 
-  //Update technologies
+  //Insert technologies
   if (technologies) {
     const technologiesAdded =
       await model.technology.createHelpRequestToTechnologies(
@@ -57,7 +57,7 @@ export async function createRequest(req: Request, res: Response) {
       return res.status(400).send('Error adding technologies');
   }
 
-  //TODO Update languages
+  //Insert languages
   if (languages) {
     const languagesAdded = await model.language.createHelpRequestToLanguages(
       helpRequestCreated.id,
