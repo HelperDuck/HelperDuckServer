@@ -6,9 +6,33 @@ name: Server test and build
 on:
   push:
     branches: ['*']
+
+env:
+  DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
 jobs:
   Server:
     runs-on: ubuntu-latest
+
+    services:
+      # Label used to access the service container
+      postgres:
+        # Docker Hub PostgreSQL image
+        image: postgres
+        # Provide the password for postgres
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          # Maps tcp port 5432 on service container to the host
+          - 5432:5432
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/fastify-graphql
 
     steps:
       - uses: actions/checkout@v3
@@ -18,5 +42,5 @@ jobs:
           node-version: 16.x
           cache: 'npm'
       - run: npm ci
+      - run: npm run build
       - run: npm test
-      - run: npm run build-server

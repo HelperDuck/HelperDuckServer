@@ -2,65 +2,125 @@ generator client {
   provider = "prisma-client-js"
 }
 
-// generator typegraphql {
-//   provider = "typegraphql-prisma"
-// }
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  uid               String    @unique @db.VarChar(255)
-  userName          String    @unique @db.VarChar(255)
-  email             String    @unique @db.VarChar(255)
-  firstName         String?   @db.VarChar(255)
-  lastName          String?   @db.VarChar(255)
-  userBio           String?  
-  gitHubProfile     String?   @db.VarChar(255)
-  profilePic        String    @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @default(now())
-  technologies      UsersToTechnologies[]
-  languages         UsersToLanguages[]
-//  Will come from Query of other tables:
-//  "openedRequests": "20",
-//  "acceptedRequests": "2",
-//  "avgTip": "20",
-//  "rating": "4.5" 
-          
+  id            Int                   @id @default(autoincrement())
+  uid           String                @unique @db.VarChar(255)
+  userName      String                @unique @db.VarChar(255)
+  email         String                @unique @db.VarChar(255)
+  firstName     String?               @db.VarChar(255)
+  lastName      String?               @db.VarChar(255)
+  userBio       String?
+  gitHubProfile String?               @db.VarChar(255)
+  profilePic    String                @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @default(now())
+  //This need to be replaced by queries in model
+  avgTip        Decimal               @default(20.21)
+  rating        Decimal               @default(5.21)
+  credits       Decimal               @default(15.5)
+  helpOffers    HelpOffer[]
+  HelpRequests  HelpRequest[]
+  languages     UsersToLanguages[]
+  technologies  UsersToTechnologies[]
 }
 
 model Technology {
-  id                Int       @id @default(autoincrement())
-  name              String    @unique @db.VarChar(255)
-  icon              String?  
-  users             UsersToTechnologies[]
+  id       Int                   @id @default(autoincrement())
+  name     String                @unique @db.VarChar(255)
+  icon     String?
+  requests HelpRequestsToTech[]
+  users    UsersToTechnologies[]
 }
 
-model UsersToTechnologies{
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  technology          Technology @relation(fields: [technologyId], references: [id])
-  technologyId       Int
+model UsersToTechnologies {
+  userId       Int
+  technologyId Int
+  technology   Technology @relation(fields: [technologyId], references: [id])
+  user         User       @relation(fields: [userId], references: [id])
+
   @@id([userId, technologyId])
 }
 
 model Language {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.VarChar(8)
-  name              String    @unique @db.VarChar(255)
-  nativeName        String?   @db.VarChar(255)
-  icon              String?
-  users             UsersToLanguages[]  
+  id            Int                       @id @default(autoincrement())
+  code          String                    @unique @db.VarChar(8)
+  name          String                    @unique @db.VarChar(255)
+  nativeName    String?                   @db.VarChar(255)
+  icon          String?
+  requestsAsked HelpRequestsToLanguages[]
+  users         UsersToLanguages[]
 }
 
 model UsersToLanguages {
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  language            Language  @relation(fields: [languageId], references: [id])
-  languageId          Int
+  userId     Int
+  languageId Int
+  language   Language @relation(fields: [languageId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
+
   @@id([userId, languageId])
+}
+
+model HelpRequest {
+  id            Int                       @id @default(autoincrement())
+  userId        Int
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @default(now())
+  status        String                    @default("open") @db.VarChar(16)
+  subject       String                    @db.VarChar(255)
+  description   String?                   @default("")
+  codeSnippet   String?                   @default("")
+  linkToSandbox String?                   @default("") @db.VarChar(255)
+  roomId        String?                   @default("") @db.VarChar(255)
+  user          User                      @relation(fields: [userId], references: [id])
+  helpOffers    HelpOffer[]
+  languages     HelpRequestsToLanguages[]
+  technologies  HelpRequestsToTech[]
+  helpSession   HelpSession?
+}
+
+model HelpOffer {
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  userId        Int
+  helpSessionId Int?
+  status        String?
+  helpRequestId Int
+  request       HelpRequest  @relation(fields: [helpRequestId], references: [id])
+  user          User         @relation(fields: [userId], references: [id])
+  helpSession   HelpSession?
+}
+
+model HelpSession {
+  id            Int         @id @default(autoincrement())
+  helpOfferId   Int         @unique
+  startTime     DateTime    @default(now())
+  endTime       DateTime?
+  duration      Int
+  helpRequestId Int         @unique
+  HelpOffer     HelpOffer   @relation(fields: [helpOfferId], references: [id])
+  Request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+}
+
+model HelpRequestsToTech {
+  helpRequestId Int
+  technologyId  Int
+  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
+  technology    Technology  @relation(fields: [technologyId], references: [id])
+
+  @@id([helpRequestId, technologyId])
+}
+
+model HelpRequestsToLanguages {
+  helpRequestId Int
+  languageId    Int
+  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  language      Language    @relation(fields: [languageId], references: [id])
+
+  @@id([helpRequestId, languageId])
 }

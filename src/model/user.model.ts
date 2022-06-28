@@ -1,14 +1,27 @@
 import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function findUniqueUser(
-  uid: string,
-  email?: string,
-  userName?: string
-) {
+export async function findUniqueUser({
+  uid,
+  email,
+  userName,
+  id,
+}: {
+  uid?: string;
+  email?: string;
+  userName?: string;
+  id?: number;
+}) {
   try {
     const user = await prisma.user.findFirst({
-      where: { OR: [{ uid: uid }, { userName: userName }, { email: email }] },
+      where: {
+        OR: [
+          { uid: uid },
+          { userName: userName },
+          { email: email },
+          { id: id },
+        ],
+      },
     });
 
     return user;
@@ -27,21 +40,12 @@ export async function findUserComplete(uid: string) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
+        helpOffers: true,
+        HelpRequests: true,
       },
     });
 
-    if (!user) return null;
-
-    //Added fields but needs to be queried for
-    const userComplete = {
-      ...user,
-      openedRequests: 20,
-      acceptedRequests: 2,
-      avgTip: 20.21,
-      rating: 4.5,
-    };
-
-    return userComplete;
+    return user;
   } catch (err) {
     console.log('Error at Model-findUserComplete', err);
     return null;
@@ -88,6 +92,17 @@ export async function deleteUser(uid: string) {
     return deletedUser;
   } catch (err) {
     console.log('Error at Model-deleteUser', err);
+    return null;
+  }
+}
+
+export async function getAllUsers() {
+  try {
+    const users = await prisma.user.findMany();
+
+    return users;
+  } catch (err) {
+    console.log('Error at Model-getAllUsers', err);
     return null;
   }
 }
