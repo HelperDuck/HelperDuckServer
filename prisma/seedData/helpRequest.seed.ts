@@ -21,6 +21,36 @@ const requestData: Prisma.HelpRequestCreateInput[] = [
       create: [{ language: { connect: { code: 'en' } } }],
     },
   },
+  {
+    user: { connect: { id: 1 } },
+    status: 'closed',
+    subject: 'how to start a pc',
+    description: 'I need some help with this',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'JavaScript' } } },
+        { technology: { connect: { name: 'Python' } } },
+      ],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
+  {
+    user: { connect: { id: 1 } },
+    status: 'canceled',
+    subject: 'how to start a pc',
+    description: 'I need some help with this',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'JavaScript' } } },
+        { technology: { connect: { name: 'Python' } } },
+      ],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
 ];
 
 export async function seedRequests() {
