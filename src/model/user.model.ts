@@ -52,6 +52,7 @@ export async function findUserComplete(uid: string) {
       acceptedRequests: 2,
       avgTip: 20.21,
       rating: 4.5,
+      credits: 25,
     };
 
     return userComplete;
