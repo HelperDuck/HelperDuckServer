@@ -60,8 +60,15 @@ io.on('connection', (socket: any) => {
   socket.on('disconnect', () => {
     console.log(`Client disconnected:${socket.id}`);
   })
+  
+  socket.on('returningSignalToServer', (data: { callerId: string | string[]; signal: any; }) => {
+    io.to(data.callerId).emit('ServerReceivedTheReturnedSignal', {
+      signal: data.signal,
+      id: socket.id,
+    });
+  });
+  
 })
-
 
 httpServer.listen(PORT, () => {
   try {
