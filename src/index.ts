@@ -37,16 +37,16 @@ io.on('connection', (socket: any) => {
     if (participants[roomId]) {
       participants[roomId].push(socket.id);
     } else {
-      participants[roomId] = socket.id;
+      participants[roomId] = [socket.id];
     }
     socketToRoom[socket.id] = roomId;
     
     const participantsInRoom = participants[roomId].filter(
-      (id: string) => id !== socket.id
+      (id: any) => id !== socket.id
     );
     
-    socket.emit('allParticipants', participantsInRoom);
     console.log('allParticipants', participantsInRoom);
+    socket.emit('allParticipants', participantsInRoom);
   })
   
   socket.on('sendingSignalToServer', (data: { userToSignal: string | string[]; signal: any; callerId: string; }) => {
