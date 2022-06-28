@@ -12,55 +12,121 @@ datasource db {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  uid               String    @unique @db.VarChar(255)
-  userName          String    @unique @db.VarChar(255)
-  email             String    @unique @db.VarChar(255)
-  firstName         String?   @db.VarChar(255)
-  lastName          String?   @db.VarChar(255)
-  userBio           String?  
-  gitHubProfile     String?   @db.VarChar(255)
-  profilePic        String    @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @default(now())
-  technologies      UsersToTechnologies[]
-  languages         UsersToLanguages[]
-//  Will come from Query of other tables:
-//  "openedRequests": "20",
-//  "acceptedRequests": "2",
-//  "avgTip": "20",
-//  "rating": "4.5" 
-          
+  id            Int                   @id @default(autoincrement())
+  uid           String                @unique @db.VarChar(255)
+  userName      String                @unique @db.VarChar(255)
+  email         String                @unique @db.VarChar(255)
+  firstName     String?               @db.VarChar(255)
+  lastName      String?               @db.VarChar(255)
+  userBio       String?
+  gitHubProfile String?               @db.VarChar(255)
+  profilePic    String                @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @default(now())
+  technologies  UsersToTechnologies[]
+  languages     UsersToLanguages[]
+  requests      HelpRequest[]
+  helpOffers    HelpOffer[]
+  //  Will come from Query of other tables:
+  //  "openedRequests": "20",
+  //  "acceptedRequests": "2",
+  //  "avgTip": "20",
+  //  "rating": "4.5"
 }
 
 model Technology {
-  id                Int       @id @default(autoincrement())
-  name              String    @unique @db.VarChar(255)
-  icon              String?  
-  users             UsersToTechnologies[]
+  id       Int                   @id @default(autoincrement())
+  name     String                @unique @db.VarChar(255)
+  icon     String?
+  users    UsersToTechnologies[]
+  requests HelpRequestsToTech[]
 }
 
-model UsersToTechnologies{
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  technology          Technology @relation(fields: [technologyId], references: [id])
-  technologyId       Int
+model UsersToTechnologies {
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  technology   Technology @relation(fields: [technologyId], references: [id])
+  technologyId Int
+
   @@id([userId, technologyId])
 }
 
 model Language {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.VarChar(8)
-  name              String    @unique @db.VarChar(255)
-  nativeName        String?   @db.VarChar(255)
-  icon              String?
-  users             UsersToLanguages[]  
+  id            Int                       @id @default(autoincrement())
+  code          String                    @unique @db.VarChar(8)
+  name          String                    @unique @db.VarChar(255)
+  nativeName    String?                   @db.VarChar(255)
+  icon          String?
+  users         UsersToLanguages[]
+  requestsAsked HelpRequestsToLanguages[]
 }
 
 model UsersToLanguages {
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  language            Language  @relation(fields: [languageId], references: [id])
-  languageId          Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  language   Language @relation(fields: [languageId], references: [id])
+  languageId Int
+
   @@id([userId, languageId])
+}
+
+model HelpRequest {
+  id            Int                       @id @default(autoincrement())
+  user          User                      @relation(fields: [userId], references: [id])
+  userId        Int
+  createdAt     DateTime                  @default(now())
+  updatedAt     DateTime                  @default(now())
+  status        String                    @default("open") @db.VarChar(16)
+  subject       String                    @db.VarChar(255)
+  description   String?                   @default("")
+  codeSnippet   String?                   @default("")
+  linkToSandbox String?                   @default("") @db.VarChar(255)
+  roomId        String?                   @default("") @db.VarChar(255)
+  technologies  HelpRequestsToTech[]
+  languages     HelpRequestsToLanguages[]
+  helpOffers    HelpOffer[]
+  helpSession   HelpSession?
+
+}
+
+model HelpOffer {
+  id            Int          @id @default(autoincrement())
+  user          User         @relation(fields: [userId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  userId        Int
+  request       HelpRequest  @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
+  helpSession   HelpSession?
+  helpSessionId Int?
+  status        String?
+}
+
+model HelpSession {
+  id            Int         @id @default(autoincrement())
+  Request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int         @unique
+  HelpOffer     HelpOffer   @relation(fields: [helpOfferId], references: [id])
+  helpOfferId   Int         @unique
+  startTime     DateTime    @default(now())
+  endTime       DateTime?
+  duration      Int
+}
+
+model HelpRequestsToTech {
+  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
+  technology    Technology  @relation(fields: [technologyId], references: [id])
+  technologyId  Int
+
+  @@id([helpRequestId, technologyId])
+}
+
+model HelpRequestsToLanguages {
+  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int
+  language      Language    @relation(fields: [languageId], references: [id])
+  languageId    Int
+
+  @@id([helpRequestId, languageId])
 }

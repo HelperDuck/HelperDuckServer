@@ -11,7 +11,7 @@ export async function updateUserLanguages(req: Request, res: Response) {
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
 
-  const user = await model.user.findUniqueUser(uid);
+  const user = await model.user.findUniqueUser({ uid: uid });
   if (!user) return res.status(404).send('User not found');
 
   const deletedLang = await model.language.deleteUsersToLanguages(user.id);
