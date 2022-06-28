@@ -58,14 +58,30 @@ io.on('connection', (socket: any) => {
   });
 
   socket.on('disconnect', () => {
+    socket.broadcast.emit('leftCall');
     console.log(`Client disconnected:${socket.id}`);
   })
   
   socket.on('returningSignalToServer', (data: { callerId: string | string[]; signal: any; }) => {
-    io.to(data.callerId).emit('ServerReceivedTheReturnedSignal', {
+    io.to(data.callerId).emit('serverReceivedTheReturnedSignal', {
       signal: data.signal,
       id: socket.id,
     });
+  });
+  
+  socket.on('disconnect', (id: any) => {
+    console.log('disconnecting.....', id);
+    const roomId = socketToRoom[socket.id];
+    let room = participants[roomId];
+
+    if (room) {
+      room = room.filter((id: any) => id !== socket.id);
+      participants[roomId] = room;
+    }
+
+    //the server side is listening for leavers
+    socket.broadcast.emit('leftCall', socket.id);
+    console.log(socket.id, 'left the room');
   });
   
 })
