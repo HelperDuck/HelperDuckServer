@@ -45,3 +45,26 @@ export async function createUsersToTechnologies(technologies: any, id: number) {
     return null;
   }
 }
+
+export async function createHelpRequestToTechnologies(
+  helpRequestId: number,
+  technologies: any[]
+) {
+  try {
+    return await prisma.helpRequest.update({
+      where: {
+        id: helpRequestId,
+      },
+      data: {
+        technologies: {
+          create: technologies.map((tech: any) => {
+            return { technology: { connect: { name: tech.technology.name } } };
+          }),
+        },
+      },
+    });
+  } catch (err) {
+    console.log('Error at updateUsersToTechnologies Model', err);
+    return null;
+  }
+}

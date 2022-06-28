@@ -15,7 +15,7 @@ export async function seedLanguages() {
         nativeName: language.nativeName,
       },
     });
-    console.log(`Language: ${languageInput} has been created`);
+    console.log(`Language: ${languageInput.name} has been created`);
   }
   console.log(`Seeding Languages has finished.`);
 }

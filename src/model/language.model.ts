@@ -34,13 +34,36 @@ export async function createUsersToLanguages(languages: any, id: number) {
       data: {
         languages: {
           create: languages.map((lang: any) => {
-            return { language: { connect: { name: lang.language.name } } };
+            return { language: { connect: { code: lang.language.code } } };
           }),
         },
       },
     });
   } catch (err) {
     console.log('Error at updateUsersToLanguages Model', err);
+    return null;
+  }
+}
+
+export async function createHelpRequestToLanguages(
+  helpRequestId: number,
+  languages: any[]
+) {
+  try {
+    return await prisma.helpRequest.update({
+      where: {
+        id: helpRequestId,
+      },
+      data: {
+        languages: {
+          create: languages.map((lang: any) => {
+            return { language: { connect: { code: lang.language.code } } };
+          }),
+        },
+      },
+    });
+  } catch (err) {
+    console.log('Error at updateHelpRequestToLanguages Model', err);
     return null;
   }
 }
