@@ -17,8 +17,7 @@ jobs:
         with:
           node-version: 16.x
           cache: 'npm'
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - run: npm ci
       - run: npm test
-        with:
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
       - run: npm run build-server
