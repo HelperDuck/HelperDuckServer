@@ -22,6 +22,19 @@ describe('API CALLS', () => {
         expect(response.body.length).toBeGreaterThan(0);
       });
 
+      test('GET /user/xxx should return the first user', async () => {
+        const response = await supertest.get(
+          '/user/jcLzJnBP2mZnKA53NhpYmp3gpkl1'
+        );
+        expect(response.status).toBe(200);
+        expect(response.body.userName).toBe('Siebe');
+      });
+
+      test('GET /user/xxxx should return 404 because user does not exist', async () => {
+        const response = await supertest.get('/user/xxxx');
+        expect(response.status).toBe(404);
+      });
+
       let userId: string;
     });
   });
