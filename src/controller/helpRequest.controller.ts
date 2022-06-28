@@ -58,6 +58,13 @@ export async function createRequest(req: Request, res: Response) {
   }
 
   //TODO Update languages
+  if (languages) {
+    const languagesAdded = await model.language.createHelpRequestToLanguages(
+      helpRequestCreated.id,
+      languages
+    );
+    if (!languagesAdded) return res.status(400).send('Error adding languages');
+  }
 
   const helpRequestComplete = await model.request.getRequestById(
     helpRequestCreated.id
