@@ -48,6 +48,14 @@ io.on('connection', (socket: any) => {
     socket.emit('allParticipants', participantsInRoom);
     console.log('allParticipants', participantsInRoom);
   })
+  
+  socket.on('sendingSignalToServer', (data: { userToSignal: string | string[]; signal: any; callerId: string; }) => {
+    io.to(data.userToSignal).emit('userHasJoined', {
+      signal: data.signal,
+      callerId: data.callerId,
+    });
+    console.log('CallerId emitted from userHasJoined', data.callerId);
+  });
 
   socket.on('disconnect', () => {
     console.log(`Client disconnected:${socket.id}`);
