@@ -19,15 +19,17 @@ router.put('/user/:uid', controllers.user.updateUser);
 //Update technologies and languages
 router.post(
   '/user/:uid/technologies',
-  controllers.technologies.updateUserTechnologies
+  controllers.technology.updateUserTechnologies
 );
+//TODO add languages
 // router.post('/user/:uid/languages', controllers.user.updateLanguages);
 
 //Languages
-router.get('/technologies', controllers.technologies.getAllProgramLang);
+router.get('/technologies', controllers.technology.getAllProgramLang);
 router.get('/languages', controllers.languages.getAllLanguages);
 
 //REQUEST ROUTES
+router.get('/requests', controllers.request.getAllRequests);
 // router.post('/request/post', controllers.postRequest);
 // router.get('/request/get/', controllers.getAllIncomingRequests);
 export default router;

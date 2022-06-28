@@ -23,6 +23,27 @@ const userData: Prisma.UserCreateInput[] = [
       ],
     },
   },
+  {
+    uid: 'AfAM70bjo9MHY8bzzD1DIeDhNxP2',
+    userName: 'Noel',
+    email: 'Noel@awesome.kf',
+    firstName: 'Noel',
+    lastName: 'guiavieira',
+    userBio: 'Socket guru',
+    gitHubProfile: 'Noel',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'JavaScript' } } },
+        { technology: { connect: { name: 'Express' } } },
+      ],
+    },
+    languages: {
+      create: [
+        { language: { connect: { code: 'en' } } },
+        { language: { connect: { code: 'es' } } },
+      ],
+    },
+  },
 ];
 
 export async function seedUsers() {

@@ -12,55 +12,121 @@ datasource db {
 }
 
 model User {
-  id                Int       @id @default(autoincrement())
-  uid               String    @unique @db.VarChar(255)
-  userName          String    @unique @db.VarChar(255)
-  email             String    @unique @db.VarChar(255)
-  firstName         String?   @db.VarChar(255)
-  lastName          String?   @db.VarChar(255)
-  userBio           String?  
-  gitHubProfile     String?   @db.VarChar(255)
-  profilePic        String    @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
-  createdAt         DateTime  @default(now())
-  updatedAt         DateTime  @default(now())
-  technologies      UsersToTechnologies[]
-  languages         UsersToLanguages[]
-//  Will come from Query of other tables:
-//  "openedRequests": "20",
-//  "acceptedRequests": "2",
-//  "avgTip": "20",
-//  "rating": "4.5" 
-          
+  id            Int                   @id @default(autoincrement())
+  uid           String                @unique @db.VarChar(255)
+  userName      String                @unique @db.VarChar(255)
+  email         String                @unique @db.VarChar(255)
+  firstName     String?               @db.VarChar(255)
+  lastName      String?               @db.VarChar(255)
+  userBio       String?
+  gitHubProfile String?               @db.VarChar(255)
+  profilePic    String                @default("https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8")
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @default(now())
+  technologies  UsersToTechnologies[]
+  languages     UsersToLanguages[]
+  requests      Request[]
+  helpOffers    HelpOffer[]
+  //  Will come from Query of other tables:
+  //  "openedRequests": "20",
+  //  "acceptedRequests": "2",
+  //  "avgTip": "20",
+  //  "rating": "4.5"
 }
 
 model Technology {
-  id                Int       @id @default(autoincrement())
-  name              String    @unique @db.VarChar(255)
-  icon              String?  
-  users             UsersToTechnologies[]
+  id       Int                   @id @default(autoincrement())
+  name     String                @unique @db.VarChar(255)
+  icon     String?
+  users    UsersToTechnologies[]
+  requests RequestsToTech[]
 }
 
-model UsersToTechnologies{
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  technology          Technology @relation(fields: [technologyId], references: [id])
-  technologyId       Int
+model UsersToTechnologies {
+  user         User       @relation(fields: [userId], references: [id])
+  userId       Int
+  technology   Technology @relation(fields: [technologyId], references: [id])
+  technologyId Int
+
   @@id([userId, technologyId])
 }
 
 model Language {
-  id                Int       @id @default(autoincrement())
-  code              String    @unique @db.VarChar(8)
-  name              String    @unique @db.VarChar(255)
-  nativeName        String?   @db.VarChar(255)
-  icon              String?
-  users             UsersToLanguages[]  
+  id            Int                   @id @default(autoincrement())
+  code          String                @unique @db.VarChar(8)
+  name          String                @unique @db.VarChar(255)
+  nativeName    String?               @db.VarChar(255)
+  icon          String?
+  users         UsersToLanguages[]
+  requestsAsked RequestsToLanguages[]
 }
 
 model UsersToLanguages {
-  user                User      @relation(fields: [userId], references: [id])
-  userId              Int
-  language            Language  @relation(fields: [languageId], references: [id])
-  languageId          Int
+  user       User     @relation(fields: [userId], references: [id])
+  userId     Int
+  language   Language @relation(fields: [languageId], references: [id])
+  languageId Int
+
   @@id([userId, languageId])
+}
+
+model Request {
+  id            Int                   @id @default(autoincrement())
+  user          User                  @relation(fields: [userId], references: [id])
+  userId        Int
+  createdAt     DateTime              @default(now())
+  updatedAt     DateTime              @default(now())
+  status        String                @default("open") @db.VarChar(16)
+  subject       String                @db.VarChar(255)
+  description   String?
+  codeSnippet   String?
+  linkToSandbox String?               @db.VarChar(255)
+  roomId        String?               @db.VarChar(255)
+  technologies  RequestsToTech[]
+  languages     RequestsToLanguages[]
+  helpOffers    HelpOffer[]
+  helpSession   HelpSession?
+
+}
+
+model HelpOffer {
+  id            Int          @id @default(autoincrement())
+  user          User         @relation(fields: [userId], references: [id])
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
+  userId        Int
+  request       Request      @relation(fields: [requestId], references: [id])
+  requestId     Int
+  helpSession   HelpSession?
+  helpSessionId Int?
+  status        String?
+}
+
+model HelpSession {
+  id          Int       @id @default(autoincrement())
+  Request     Request   @relation(fields: [requestId], references: [id])
+  requestId   Int       @unique
+  HelpOffer   HelpOffer @relation(fields: [helpOfferId], references: [id])
+  helpOfferId Int       @unique
+  startTime   DateTime  @default(now())
+  endTime     DateTime?
+  duration    Int
+}
+
+model RequestsToTech {
+  request      Request    @relation(fields: [requestId], references: [id])
+  requestId    Int
+  technology   Technology @relation(fields: [technologyId], references: [id])
+  technologyId Int
+
+  @@id([requestId, technologyId])
+}
+
+model RequestsToLanguages {
+  request    Request  @relation(fields: [requestId], references: [id])
+  requestId  Int
+  language   Language @relation(fields: [languageId], references: [id])
+  languageId Int
+
+  @@id([requestId, languageId])
 }
