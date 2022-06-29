@@ -12,6 +12,8 @@ CREATE TABLE "User" (
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "avgTip" DECIMAL(65,30) NOT NULL DEFAULT 20.21,
+    "tipsReceived" DECIMAL(65,30) NOT NULL DEFAULT 0,
+    "tipsGiven" DECIMAL(65,30) NOT NULL DEFAULT 0,
     "rating" DECIMAL(65,30) NOT NULL DEFAULT 5.21,
     "credits" DECIMAL(65,30) NOT NULL DEFAULT 10,
 
@@ -91,6 +93,8 @@ CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
     "rating" INTEGER DEFAULT 5,
     "comment" TEXT,
+    "role" TEXT NOT NULL DEFAULT 'Helper',
+    "userId" INTEGER,
 
     CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
@@ -152,6 +156,9 @@ ALTER TABLE "HelpOffer" ADD CONSTRAINT "HelpOffer_helpRequestId_fkey" FOREIGN KE
 
 -- AddForeignKey
 ALTER TABLE "HelpOffer" ADD CONSTRAINT "HelpOffer_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Review" ADD CONSTRAINT "Review_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HelpRequestsToTech" ADD CONSTRAINT "HelpRequestsToTech_technologyId_fkey" FOREIGN KEY ("technologyId") REFERENCES "Technology"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
