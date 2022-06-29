@@ -41,7 +41,7 @@ export async function findUserComplete(uid: string) {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
         helpOffers: true,
-        HelpRequests: true,
+        helpRequests: true,
       },
     });
 
