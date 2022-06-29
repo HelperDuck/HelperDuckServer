@@ -39,11 +39,42 @@ export async function getHelpOfferById(id: number) {
 export async function createHelpOffer(helpOfferData: HelpOffer) {
   try {
     const helpOffer = await prisma.helpOffer.create({
-      data: helpOfferData,
+      data: {
+        user: { connect: { id: helpOfferData.userId } },
+        helpRequest: { connect: { id: helpOfferData.helpRequestId } },
+        status: 'open',
+      },
+      include: {
+        user: true,
+        helpRequest: true,
+        helpSession: true,
+      },
     });
     return helpOffer;
   } catch (err) {
     console.log('Error at Model-createHelpOffer', err);
+    return null;
+  }
+}
+
+export async function updateHelpOffer(helpOfferData: HelpOffer) {
+  try {
+    const helpOffer = await prisma.helpOffer.update({
+      where: {
+        id: helpOfferData.id,
+      },
+      data: {
+        status: helpOfferData.status,
+      },
+      include: {
+        user: true,
+        helpRequest: true,
+        helpSession: true,
+      },
+    });
+    return helpOffer;
+  } catch (err) {
+    console.log('Error at Model-updateHelpOffer', err);
     return null;
   }
 }

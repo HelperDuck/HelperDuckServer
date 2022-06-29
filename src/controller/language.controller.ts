@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import model from '../model/index';
+import model from '../model/index.models';
 
 export async function getAllLanguages(req: Request, res: Response) {
   const allLanguages = await model.language.getAllLanguages();
