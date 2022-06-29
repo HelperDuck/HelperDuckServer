@@ -30,9 +30,9 @@ router.get('/technologies', controllers.technology.getAllProgramLang);
 router.get('/languages', controllers.languages.getAllLanguages);
 
 //HelpRequest ROUTES
-router.get('/helpRequests', controllers.request.getAllRequests);
-router.get('/helpRequest/:id', controllers.request.getRequestById);
-router.post('/helpRequest', controllers.request.createRequest);
+router.get('/helpRequests', controllers.request.getAllHelpRequests);
+router.get('/helpRequest/:id', controllers.request.getHelpRequestById);
+router.post('/helpRequest', controllers.request.createHelpRequest);
 
 // router.post('/request/post', controllers.postRequest);
 // router.get('/request/get/', controllers.getAllIncomingRequests);
