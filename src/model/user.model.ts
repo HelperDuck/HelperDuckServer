@@ -40,21 +40,12 @@ export async function findUserComplete(uid: string) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
+        helpOffers: true,
+        helpRequests: true,
       },
     });
 
-    if (!user) return null;
-
-    //Added fields but needs to be queried for
-    const userComplete = {
-      ...user,
-      openedRequests: 20,
-      acceptedRequests: 2,
-      avgTip: 20.21,
-      rating: 4.5,
-    };
-
-    return userComplete;
+    return user;
   } catch (err) {
     console.log('Error at Model-findUserComplete', err);
     return null;

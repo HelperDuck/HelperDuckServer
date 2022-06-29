@@ -3,3 +3,4 @@ build
 .env
 helperDuckDb.db
 helperDuckDb.db-journal
+.vscode

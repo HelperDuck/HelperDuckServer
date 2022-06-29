@@ -1,13 +1,14 @@
 import { HelpRequest, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
-export async function getAllRequests() {
+export async function getAllHelpRequests() {
   try {
     const requests = await prisma.helpRequest.findMany({
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
         user: true,
+        helpOffers: true,
       },
     });
     return requests;
@@ -17,7 +18,7 @@ export async function getAllRequests() {
   }
 }
 
-export async function getRequestById(id: number) {
+export async function getHelpRequestById(id: number) {
   try {
     const request = await prisma.helpRequest.findUnique({
       where: {
@@ -27,6 +28,7 @@ export async function getRequestById(id: number) {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
         user: true,
+        helpOffers: true,
       },
     });
     return request;
