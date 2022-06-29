@@ -4,7 +4,7 @@ import model from '../model/index';
 //Requests related functions
 
 export async function getAllHelpRequests(req: Request, res: Response) {
-  const requests = await model.request.getAllHelpRequests();
+  const requests = await model.helpRequest.getAllHelpRequests();
   if (!requests) return res.status(400).send('Error getting requests');
   return res.status(200).send(requests);
 }
@@ -12,7 +12,7 @@ export async function getAllHelpRequests(req: Request, res: Response) {
 export async function getHelpRequestById(req: Request, res: Response) {
   const id: number = parseInt(req.params.id);
   if (!id) return res.status(400).send('No id provided');
-  const request = await model.request.getHelpRequestById(id);
+  const request = await model.helpRequest.getHelpRequestById(id);
   if (!request) return res.status(404).send('Request not found');
   return res.status(200).send(request);
 }
@@ -38,7 +38,7 @@ export async function createHelpRequest(req: Request, res: Response) {
   delete helpRequestUnnested.technologies;
   delete helpRequestUnnested.languages;
 
-  const helpRequestCreated = await model.request.createHelpRequest(
+  const helpRequestCreated = await model.helpRequest.createHelpRequest(
     helpRequestUnnested
   );
   if (!helpRequestCreated)
@@ -64,7 +64,7 @@ export async function createHelpRequest(req: Request, res: Response) {
     if (!languagesAdded) return res.status(400).send('Error adding languages');
   }
 
-  const helpRequestComplete = await model.request.getHelpRequestById(
+  const helpRequestComplete = await model.helpRequest.getHelpRequestById(
     helpRequestCreated.id
   );
   if (!helpRequestComplete)
