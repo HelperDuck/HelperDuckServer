@@ -34,19 +34,20 @@ io.on('connection', (socket: any) => {
   socket.emit('me', socket.id);
   
   socket.on('joiningRoom', (roomId: string) => {
+    console.log(roomId, 'roooomID');
     if (participants[roomId]) {
       participants[roomId].push(socket.id);
     } else {
-      participants[roomId] = socket.id;
+      participants[roomId] = [socket.id];
     }
     socketToRoom[socket.id] = roomId;
     
     const participantsInRoom = participants[roomId].filter(
-      (id: string) => id !== socket.id
+      (id: any) => id !== socket.id
     );
     
-    socket.emit('allParticipants', participantsInRoom);
     console.log('allParticipants', participantsInRoom);
+    socket.emit('allParticipants', participantsInRoom);
   })
   
   socket.on('sendingSignalToServer', (data: { userToSignal: string | string[]; signal: any; callerId: string; }) => {
@@ -57,6 +58,11 @@ io.on('connection', (socket: any) => {
     console.log('CallerId emitted from userHasJoined', data.callerId);
   });
 
+  socket.on('screenToggling', (data: any)=> {
+    console.log('testing screenToggling', data)
+    socket.broadcast.emit('screenToggling', data);
+  })
+  
   socket.on('disconnect', () => {
     socket.broadcast.emit('leftCall');
     console.log(`Client disconnected:${socket.id}`);

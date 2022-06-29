@@ -15,27 +15,22 @@ describe('API CALLS', () => {
       expect(response.text).toBe('🦆🦆🦆🦆🦆Quack Quack Quack🦆🦆🦆🦆🦆');
     });
 
-    describe('USER', () => {
-      test('GET /users should return 200 and return users', async () => {
-        const response = await supertest.get('/users');
-        expect(response.status).toBe(200);
-        expect(response.body.length).toBeGreaterThan(0);
-      });
+    test('All methods return 404 to invalid routes', async () => {
+      const response = await supertest.get('/invalid');
+      expect(response.status).toBe(404);
+      expect(response.text).toBe('404 Not Found');
 
-      test('GET /user/xxx should return the first user', async () => {
-        const response = await supertest.get(
-          '/user/jcLzJnBP2mZnKA53NhpYmp3gpkl1'
-        );
-        expect(response.status).toBe(200);
-        expect(response.body.userName).toBe('Siebe');
-      });
+      const response2 = await supertest.post('/invalid');
+      expect(response2.status).toBe(404);
+      expect(response2.text).toBe('404 Not Found');
 
-      test('GET /user/xxxx should return 404 because user does not exist', async () => {
-        const response = await supertest.get('/user/xxxx');
-        expect(response.status).toBe(404);
-      });
+      const response3 = await supertest.put('/invalid');
+      expect(response3.status).toBe(404);
+      expect(response3.text).toBe('404 Not Found');
 
-      let userId: string;
+      const response4 = await supertest.delete('/invalid');
+      expect(response4.status).toBe(404);
+      expect(response4.text).toBe('404 Not Found');
     });
   });
 });
