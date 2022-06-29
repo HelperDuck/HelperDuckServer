@@ -106,6 +106,21 @@ const userData: Prisma.UserCreateInput[] = [
       ],
     },
   },
+  {
+    uid: 'test2',
+    userName: 'test2',
+    email: 'test@test.test2',
+    firstName: 'Test2',
+    lastName: 'Test2',
+    userBio: 'TestUser2',
+    gitHubProfile: 'TestingTheTest2',
+    technologies: {
+      create: [{ technology: { connect: { name: 'Atom' } } }],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
 ];
 
 export async function seedUsers() {
