@@ -23,16 +23,16 @@ describe('USER', () => {
 
   let user: User;
   //Delete user to make sure test starts with a clean database
-  beforeEach(async () => {
-    await supertest.delete(`/user/${mocks.mockUser.user.uid}`);
-  });
+  // beforeEach(async () => {
+  //   await supertest.delete(`/user/${mocks.mockUser.user.uid}`);
+  // });
 
   test('Post user with no data should return 400', async () => {
     const response = await supertest.post('/user');
     expect(response.status).toBe(400);
   });
 
-  test('POST /user should return 201 and return the new user', async () => {
+  test('POST /user should return 200 and return the new user', async () => {
     const response = await supertest.post('/user').send(mocks.mockUser.user);
     expect(response.status).toBe(200);
     expect(response.body.userName).toBe('testUser');
@@ -56,7 +56,7 @@ describe('USER', () => {
       .put(`/user/${user.uid}`)
       .send(mocks.mockUser.updateUser);
     expect(response.status).toBe(200);
-    expect(response.body.userName).toBe('testUpdated');
+    expect(response.body.userName).toBe('testUserUpdate');
   });
 
   test('Delete user should return 200', async () => {

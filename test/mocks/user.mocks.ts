@@ -1,7 +1,7 @@
 export const user = {
   uid: 'testUser',
   userName: 'testUser',
-  email: 'testUser',
+  email: 'testUser@test.nl',
   firstName: 'testUser',
   lastName: 'testUser',
   userBio: 'testUser',
@@ -75,17 +75,11 @@ export const updateTechnology = {
 };
 
 export const updateUser = {
-  uid: 'test',
-  userName: 'testUpdated',
-  email: 'testUpdated',
-  firstName: 'Siebe',
-  lastName: 'Kylstra',
-  userBio: 'DevOps nerd updated',
-  technologies: [
-    {
-      technology: {
-        name: 'JavaScript',
-      },
-    },
-  ],
+  userName: 'testUserUpdate',
+  email: 'testUserUpdate@test.nl',
+  firstName: 'testUserUpdate',
+  lastName: 'testUserUpdate',
+  userBio: 'testUserUpdate',
+  gitHubProfile: 'testUserUpdate',
+  profilePic: 'somethingInvalid',
 };
