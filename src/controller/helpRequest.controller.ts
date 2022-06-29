@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import model from '../model/index';
+import model from '../model/index.models';
 
 //helpRequests related functions
 
