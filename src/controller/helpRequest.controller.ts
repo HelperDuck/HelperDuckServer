@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import model from '../model/index';
 
-//Requests related functions
+//helpRequests related functions
 
 export async function getAllHelpRequests(req: Request, res: Response) {
   const requests = await model.helpRequest.getAllHelpRequests();
