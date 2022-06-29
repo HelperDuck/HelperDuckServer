@@ -58,6 +58,11 @@ io.on('connection', (socket: any) => {
     console.log('CallerId emitted from userHasJoined', data.callerId);
   });
 
+  socket.on('screenToggling', (data: any)=> {
+    console.log('testing screenToggling', data)
+    socket.broadcast.emit('screenToggling', data);
+  })
+  
   socket.on('disconnect', () => {
     socket.broadcast.emit('leftCall');
     console.log(`Client disconnected:${socket.id}`);
