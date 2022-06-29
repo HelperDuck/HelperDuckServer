@@ -24,17 +24,17 @@ model User {
   rating        Decimal               @default(5.21)
   credits       Decimal               @default(15.5)
   helpOffers    HelpOffer[]
-  HelpRequests  HelpRequest[]
+  helpRequests  HelpRequest[]
   languages     UsersToLanguages[]
   technologies  UsersToTechnologies[]
 }
 
 model Technology {
-  id       Int                   @id @default(autoincrement())
-  name     String                @unique @db.VarChar(255)
-  icon     String?
-  requests HelpRequestsToTech[]
-  users    UsersToTechnologies[]
+  id           Int                   @id @default(autoincrement())
+  name         String                @unique @db.VarChar(255)
+  icon         String?
+  helpRequests HelpRequestsToTech[]
+  users        UsersToTechnologies[]
 }
 
 model UsersToTechnologies {
@@ -89,9 +89,9 @@ model HelpOffer {
   updatedAt     DateTime     @default(now())
   userId        Int
   helpSessionId Int?
-  status        String?
+  status        String?      @default("open")
   helpRequestId Int
-  request       HelpRequest  @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest  @relation(fields: [helpRequestId], references: [id])
   user          User         @relation(fields: [userId], references: [id])
   helpSession   HelpSession?
 }
@@ -103,8 +103,8 @@ model HelpSession {
   endTime       DateTime?
   duration      Int
   helpRequestId Int         @unique
-  HelpOffer     HelpOffer   @relation(fields: [helpOfferId], references: [id])
-  Request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpOffer     HelpOffer   @relation(fields: [helpOfferId], references: [id])
+  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
 }
 
 model HelpRequestsToTech {
@@ -119,7 +119,7 @@ model HelpRequestsToTech {
 model HelpRequestsToLanguages {
   helpRequestId Int
   languageId    Int
-  request       HelpRequest @relation(fields: [helpRequestId], references: [id])
+  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
   language      Language    @relation(fields: [languageId], references: [id])
 
   @@id([helpRequestId, languageId])
