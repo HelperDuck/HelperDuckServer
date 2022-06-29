@@ -51,9 +51,6 @@ router.post(
   controllers.helpOffer.declineHelpOffer
 );
 
-// router.post('/request/post', controllers.postRequest);
-// router.get('/request/get/', controllers.getAllIncomingRequests);
-
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));
 router.post('*', (req, res) => res.status(404).send('404 Not Found'));
