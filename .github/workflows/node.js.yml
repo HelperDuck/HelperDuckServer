@@ -7,9 +7,6 @@ on:
   push:
     branches: ['*']
 
-env:
-  DATABASE_URL: ${{ secrets.DATABASE_URL }}
-
 jobs:
   Server:
     runs-on: ubuntu-latest

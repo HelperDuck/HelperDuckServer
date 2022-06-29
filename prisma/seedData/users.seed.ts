@@ -3,6 +3,24 @@ import { PrismaClient, Prisma } from '@prisma/client';
 const prisma = new PrismaClient();
 const userData: Prisma.UserCreateInput[] = [
   {
+    uid: 'test',
+    userName: 'test',
+    email: 'test@test.test',
+    firstName: 'Test',
+    lastName: 'Test',
+    userBio: 'TestUser',
+    gitHubProfile: 'TestingTheTest',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'Java' } } },
+        { technology: { connect: { name: 'Python' } } },
+      ],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
+  {
     uid: 'jcLzJnBP2mZnKA53NhpYmp3gpkl1',
     userName: 'Siebe',
     email: 'siebe.kylstra@gmail.com',
@@ -41,6 +59,50 @@ const userData: Prisma.UserCreateInput[] = [
       create: [
         { language: { connect: { code: 'en' } } },
         { language: { connect: { code: 'es' } } },
+      ],
+    },
+  },
+  {
+    uid: 'zTFzj6Ps4CXpTUbfaylHwnHL7jv2',
+    userName: 'fegananca',
+    email: 'fegananca@gmail.com',
+    firstName: 'Fernanda',
+    lastName: 'Ganança',
+    userBio: 'Trying to be a nerd',
+    gitHubProfile: 'fegananca',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'JavaScript' } } },
+        { technology: { connect: { name: 'Express' } } },
+        { technology: { connect: { name: 'React' } } },
+      ],
+    },
+    languages: {
+      create: [
+        { language: { connect: { code: 'en' } } },
+        { language: { connect: { code: 'es' } } },
+        { language: { connect: { code: 'pt' } } },
+      ],
+    },
+  },
+  {
+    uid: 'eZhAcxMeGnahj6Q8xidUaPQ3a933',
+    userName: 'MauSca',
+    email: 'scainmauricio@gmail.com',
+    firstName: 'Mauricio',
+    lastName: 'Scain',
+    userBio: '72 years old dev',
+    gitHubProfile: 'https://github.com/scainMauricio',
+    technologies: {
+      create: [
+        { technology: { connect: { name: 'JavaScript' } } },
+        { technology: { connect: { name: 'React' } } },
+      ],
+    },
+    languages: {
+      create: [
+        { language: { connect: { code: 'en' } } },
+        { language: { connect: { code: 'pt' } } },
       ],
     },
   },
