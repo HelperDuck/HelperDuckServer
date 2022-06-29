@@ -14,7 +14,7 @@ async function main() {
   await seedLanguages();
   await seedUsers();
   await seedHelpRequests();
-  await seedHelpOffers();
+  // await seedHelpOffers();
 
   console.log(`Seeding finished.`);
 }

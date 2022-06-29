@@ -40,8 +40,9 @@ export async function findUserComplete(uid: string) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
-        helpOffers: true,
+        helpOffers: { include: { review: true } },
         helpRequests: true,
+        reviews: true,
       },
     });
 

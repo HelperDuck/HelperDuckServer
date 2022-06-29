@@ -8,12 +8,12 @@ CREATE TABLE "User" (
     "lastName" VARCHAR(255),
     "userBio" TEXT,
     "gitHubProfile" VARCHAR(255),
-    "profilePic" TEXT NOT NULL DEFAULT E'https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8',
+    "profilePic" TEXT NOT NULL DEFAULT 'https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "avgTip" DECIMAL(65,30) NOT NULL DEFAULT 20.21,
     "rating" DECIMAL(65,30) NOT NULL DEFAULT 5.21,
-    "credits" DECIMAL(65,30) NOT NULL DEFAULT 15.5,
+    "credits" DECIMAL(65,30) NOT NULL DEFAULT 10,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("id")
 );
@@ -60,12 +60,13 @@ CREATE TABLE "HelpRequest" (
     "userId" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "status" VARCHAR(16) NOT NULL DEFAULT E'open',
+    "status" VARCHAR(16) NOT NULL DEFAULT 'open',
     "subject" VARCHAR(255) NOT NULL,
-    "description" TEXT DEFAULT E'',
-    "codeSnippet" TEXT DEFAULT E'',
-    "linkToSandbox" VARCHAR(255) DEFAULT E'',
-    "roomId" VARCHAR(255) DEFAULT E'',
+    "description" TEXT DEFAULT '',
+    "codeSnippet" TEXT DEFAULT '',
+    "linkToSandbox" VARCHAR(255) DEFAULT '',
+    "roomId" VARCHAR(255) DEFAULT '',
+    "tipGiven" DECIMAL(65,30) NOT NULL DEFAULT 0,
 
     CONSTRAINT "HelpRequest_pkey" PRIMARY KEY ("id")
 );
@@ -77,22 +78,21 @@ CREATE TABLE "HelpOffer" (
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "userId" INTEGER NOT NULL,
     "helpSessionId" INTEGER,
-    "status" TEXT DEFAULT E'open',
+    "status" TEXT DEFAULT 'open',
     "helpRequestId" INTEGER NOT NULL,
+    "reviewId" INTEGER,
+    "tipReceived" DECIMAL(65,30) NOT NULL DEFAULT 0,
 
     CONSTRAINT "HelpOffer_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "HelpSession" (
+CREATE TABLE "Review" (
     "id" SERIAL NOT NULL,
-    "helpOfferId" INTEGER NOT NULL,
-    "startTime" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "endTime" TIMESTAMP(3),
-    "duration" INTEGER NOT NULL,
-    "helpRequestId" INTEGER NOT NULL,
+    "rating" INTEGER DEFAULT 5,
+    "comment" TEXT,
 
-    CONSTRAINT "HelpSession_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "Review_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -129,12 +129,6 @@ CREATE UNIQUE INDEX "Language_code_key" ON "Language"("code");
 -- CreateIndex
 CREATE UNIQUE INDEX "Language_name_key" ON "Language"("name");
 
--- CreateIndex
-CREATE UNIQUE INDEX "HelpSession_helpOfferId_key" ON "HelpSession"("helpOfferId");
-
--- CreateIndex
-CREATE UNIQUE INDEX "HelpSession_helpRequestId_key" ON "HelpSession"("helpRequestId");
-
 -- AddForeignKey
 ALTER TABLE "UsersToTechnologies" ADD CONSTRAINT "UsersToTechnologies_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
@@ -157,10 +151,7 @@ ALTER TABLE "HelpOffer" ADD CONSTRAINT "HelpOffer_userId_fkey" FOREIGN KEY ("use
 ALTER TABLE "HelpOffer" ADD CONSTRAINT "HelpOffer_helpRequestId_fkey" FOREIGN KEY ("helpRequestId") REFERENCES "HelpRequest"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "HelpSession" ADD CONSTRAINT "HelpSession_helpRequestId_fkey" FOREIGN KEY ("helpRequestId") REFERENCES "HelpRequest"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "HelpSession" ADD CONSTRAINT "HelpSession_helpOfferId_fkey" FOREIGN KEY ("helpOfferId") REFERENCES "HelpOffer"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "HelpOffer" ADD CONSTRAINT "HelpOffer_reviewId_fkey" FOREIGN KEY ("reviewId") REFERENCES "Review"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "HelpRequestsToTech" ADD CONSTRAINT "HelpRequestsToTech_technologyId_fkey" FOREIGN KEY ("technologyId") REFERENCES "Technology"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
