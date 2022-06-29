@@ -16,9 +16,9 @@ export async function getHelpOfferById(req: Request, res: Response) {
   return res.status(200).send(helpOffer);
 }
 
-export async function createHelpOffer(req: Request, res: Response) {
-  const helpOfferData: any = req.body;
+// export async function createHelpOffer(req: Request, res: Response) {
+//   const helpOfferData: any = req.body;
 
-  if (!helpOfferData.userId || !helpOfferData.subject)
-    return res.status(400).send('No userId or subject provided');
-}
+//   if (!helpOfferData.userId || !helpOfferData.subject)
+//     return res.status(400).send('No userId or subject provided');
+// }
