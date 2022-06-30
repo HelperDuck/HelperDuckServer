@@ -13,7 +13,7 @@ export async function seedTechnologies() {
         icon: value,
       },
     });
-    console.log(`Technology: ${key} has been created`);
+    // console.log(`Technology: ${key} has been created`);
   }
   console.log(`Seeding Technologies has finished.`);
 }

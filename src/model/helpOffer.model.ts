@@ -7,7 +7,7 @@ export async function getAllHelpOffers() {
       include: {
         user: true,
         helpRequest: true,
-        helpSession: true,
+        review: true,
       },
     });
     return helpOffers;
@@ -26,7 +26,8 @@ export async function getHelpOfferById(id: number) {
       include: {
         user: true,
         helpRequest: true,
-        helpSession: true,
+        review: true,
+        // helpSession: true,
       },
     });
     return helpOffer;
@@ -47,7 +48,8 @@ export async function createHelpOffer(helpOfferData: HelpOffer) {
       include: {
         user: true,
         helpRequest: true,
-        helpSession: true,
+        review: true,
+        // helpSession: true,
       },
     });
     return helpOffer;
@@ -69,7 +71,7 @@ export async function updateHelpOffer(helpOfferData: HelpOffer) {
       include: {
         user: true,
         helpRequest: true,
-        helpSession: true,
+        review: true,
       },
     });
     return helpOffer;

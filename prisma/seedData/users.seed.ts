@@ -106,6 +106,66 @@ const userData: Prisma.UserCreateInput[] = [
       ],
     },
   },
+  {
+    uid: 'test2',
+    userName: 'test2',
+    email: 'test@test.test2',
+    firstName: 'Test2',
+    lastName: 'Test2',
+    userBio: 'TestUser2',
+    gitHubProfile: 'TestingTheTest2',
+    technologies: {
+      create: [{ technology: { connect: { name: 'Atom' } } }],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
+  {
+    uid: 'test3',
+    userName: 'test3',
+    email: 'test@test.test3',
+    firstName: 'Test2',
+    lastName: 'Test2',
+    userBio: 'TestUser2',
+    gitHubProfile: 'TestingTheTest2',
+    technologies: {
+      create: [{ technology: { connect: { name: 'Atom' } } }],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
+  {
+    uid: 'test4',
+    userName: 'test4',
+    email: 'test@test.test4',
+    firstName: 'Test2',
+    lastName: 'Test2',
+    userBio: 'TestUser2',
+    gitHubProfile: 'TestingTheTest2',
+    technologies: {
+      create: [{ technology: { connect: { name: 'Atom' } } }],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
+  {
+    uid: 'test5',
+    userName: 'test5',
+    email: 'test@test.test5',
+    firstName: 'Test5',
+    lastName: 'Test2',
+    userBio: 'TestUser2',
+    gitHubProfile: 'TestingTheTest2',
+    technologies: {
+      create: [{ technology: { connect: { name: 'Atom' } } }],
+    },
+    languages: {
+      create: [{ language: { connect: { code: 'en' } } }],
+    },
+  },
 ];
 
 export async function seedUsers() {

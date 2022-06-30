@@ -122,6 +122,13 @@ export async function deleteUser(req: Request, res: Response) {
   const deleteLang = await model.language.deleteUsersToLanguages(user.id);
   if (!deleteLang) return res.status(400).send('Error deleting languages');
 
+  const cancelHelpRequests = await model.helpRequest.updateHelpRequestForUser(
+    user.id,
+    { status: 'cancelled' }
+  );
+  if (!cancelHelpRequests)
+    return res.status(400).send('Error cancelling help requests');
+
   const deletedUser = await model.user.deleteUser(uid);
   if (!deletedUser) return res.status(400).send('Error deleting user');
 

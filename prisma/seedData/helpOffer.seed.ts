@@ -24,7 +24,7 @@ function generateInput(userId: number): Prisma.HelpOfferCreateInput[] {
 
 function generateForAllUsers() {
   let dataForAllUsers: any[] = [];
-  for (let i = 0; i <= 3; i++) {
+  for (let i = 1; i <= 5; i++) {
     const input = [...generateInput(i)];
     dataForAllUsers.push(...input);
   }
