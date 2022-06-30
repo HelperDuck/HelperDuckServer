@@ -97,9 +97,6 @@ export async function findHelpRequests(req: Request, res: Response) {
     userId?: string;
     status?: string;
   } = req.query;
-  //  ;
-
-  console.log(searchData);
 
   if (Object.keys(searchData).length === 0)
     return res

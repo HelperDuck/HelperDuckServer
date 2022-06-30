@@ -22,6 +22,10 @@ export async function findUniqueUser({
           { id: id },
         ],
       },
+      // include: {
+      //   helpRequests: true,
+      //   helpOffers: true,
+      // },
     });
 
     return user;

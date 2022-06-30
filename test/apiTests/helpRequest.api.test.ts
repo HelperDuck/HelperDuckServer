@@ -14,6 +14,7 @@ describe('helpRequest', () => {
   //create a user and then create a helpRequest
   let user: User;
   let helpRequest: any;
+  let helpRequestData: any;
 
   test('Delete user should return 404 because user does not exist', async () => {
     const response = await supertest.delete(
@@ -31,6 +32,8 @@ describe('helpRequest', () => {
     user = response.body;
   });
 
+  // mocks.mockHelpRequest.userId = user.id;
+
   //First get statement with false helpRequestId should return 404
   test('GET /helpRequest/uid should return 200 and return helpRequests', async () => {
     const response = await supertest.get('/helpRequest/' + 999);
@@ -39,8 +42,13 @@ describe('helpRequest', () => {
 
   //Create a helpRequest by userID with minimal data
   test('POST /helpRequest should return 200 and return the new helpRequest', async () => {
-    const helpRequestData = { userId: user.id, subject: 'TestHelpRequest' };
-    const response = await supertest.post('/helpRequest').send(helpRequestData);
+    const helpRequestDataSmall = {
+      userId: user.id,
+      subject: 'TestHelpRequest',
+    };
+    const response = await supertest
+      .post('/helpRequest')
+      .send(helpRequestDataSmall);
     expect(response.status).toBe(200);
     helpRequest = response.body;
     expect(helpRequest.subject).toBe('TestHelpRequest');
@@ -81,21 +89,21 @@ describe('helpRequest', () => {
 
   //Insert second helpRequest with all data
   test('POST /helpRequest should return 200 and return the new helpRequest', async () => {
-    const response = await supertest
-      .post('/helpRequest')
-      .send(mocks.mockHelpRequest.helpRequestTotal);
+    //Create a helpRequestData object with the userId
+    helpRequestData = {
+      ...mocks.mockHelpRequest.helpRequestTotal,
+      userId: user.id,
+    };
+
+    const response = await supertest.post('/helpRequest').send(helpRequestData);
     expect(response.status).toBe(200);
     helpRequest = response.body;
-    expect(helpRequest.subject).toBe(
-      mocks.mockHelpRequest.helpRequestTotal.subject
-    );
+    expect(helpRequest.subject).toBe(helpRequestData.subject);
     expect(helpRequest.status).toBe('open');
     expect(helpRequest.technologies.length).toBe(
-      mocks.mockHelpRequest.helpRequestTotal.technologies.length
+      helpRequestData.technologies.length
     );
-    expect(helpRequest.user.id).toBe(
-      mocks.mockHelpRequest.helpRequestTotal.userId
-    );
+    expect(helpRequest.user.id).toBe(helpRequestData.userId);
   });
 
   //Tests for getting helpRequests by different parameters
@@ -115,5 +123,17 @@ describe('helpRequest', () => {
   test('Delete user should return 200', async () => {
     const response = await supertest.delete('/user/' + user.uid);
     expect(response.status).toBe(200);
+  });
+
+  test('GET /findHelpRequest? should still return the helpRequests but with status canceled', async () => {
+    console.log(helpRequest.id);
+
+    const response = await supertest.get(
+      `/findHelpRequest?helpRequestId=${helpRequest.id}`
+    );
+    expect(response.status).toBe(200);
+    expect(response.body.length).toBe(1);
+    expect(response.body[0].status).toBe('cancelled');
+    // expect(response.body[0].status).toBe('canceled');
   });
 });
