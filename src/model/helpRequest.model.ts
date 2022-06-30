@@ -49,3 +49,17 @@ export async function createHelpRequest(requestData: HelpRequest) {
     return null;
   }
 }
+
+export async function deleteHelpRequest(helpRequestId: number) {
+  try {
+    const request = await prisma.helpRequest.delete({
+      where: {
+        id: helpRequestId,
+      },
+    });
+    return request;
+  } catch (err) {
+    console.log('Error at Model-deleteRequest', err);
+    return null;
+  }
+}

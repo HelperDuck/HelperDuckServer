@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   res.send('🦆🦆🦆🦆🦆Quack Quack Quack🦆🦆🦆🦆🦆');
-  console.log('server got request');
 });
 
 // everything will be uncommented as soon as fully implemented.
@@ -32,7 +31,17 @@ router.get('/languages', controllers.languages.getAllLanguages);
 //HelpRequest ROUTES
 router.get('/helpRequests', controllers.helpRequest.getAllHelpRequests);
 router.get('/helpRequest/:id', controllers.helpRequest.getHelpRequestById);
+router.get('/findHelpRequest?', controllers.helpRequest.findHelpRequests);
+
 router.post('/helpRequest', controllers.helpRequest.createHelpRequest);
+//TODO
+router.delete(
+  '/helpRequest?:helpRequestId',
+  controllers.helpRequest.deleteHelpRequest
+);
+
+//TODO maybe make a more readable route for this. Something like:
+// router.get('/helpRequests/:uid', controllers.helpRequest.getUserHelpRequestsByUid);
 
 //HelpOffer ROUTES
 router.get('/helpOffers', controllers.helpOffer.getAllHelpOffers);

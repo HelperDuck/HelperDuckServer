@@ -8,6 +8,7 @@
   "main": "index.js",
   "scripts": {
     "test": "jest --forceExit",
+    "test-dev": "jest --forceExit --watch",
     "start": "node build/index.js",
     "start-dev": "ts-node-dev src/index.ts",
     "build": "tsc && npm run build-db",

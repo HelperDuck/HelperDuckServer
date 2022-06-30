@@ -70,7 +70,7 @@ model UsersToLanguages {
 
 model HelpRequest {
   id            Int                       @id @default(autoincrement())
-  userId        Int
+  userId        Int?
   createdAt     DateTime                  @default(now())
   updatedAt     DateTime                  @default(now())
   status        String                    @default("open") @db.VarChar(16)
@@ -79,7 +79,7 @@ model HelpRequest {
   codeSnippet   String?                   @default("")
   linkToSandbox String?                   @default("") @db.VarChar(255)
   roomId        String?                   @default("") @db.VarChar(255)
-  user          User                      @relation(fields: [userId], references: [id])
+  user          User?                     @relation(fields: [userId], references: [id])
   tipGiven      Decimal                   @default(0)
   helpOffers    HelpOffer[]
   languages     HelpRequestsToLanguages[]

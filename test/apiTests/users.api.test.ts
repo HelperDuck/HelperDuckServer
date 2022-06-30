@@ -1,13 +1,13 @@
-import { supertest } from './app';
+import { supertest } from '../testServer';
 import { describe, expect, test } from '@jest/globals';
-import mocks from './mocks/index.mocks';
+import mocks from '../mocks/index.mocks';
 import { User } from '@prisma/client';
 
-describe('USER', () => {
+describe('User', () => {
   test('GET /users should return 200 and return users', async () => {
     const response = await supertest.get('/users');
     expect(response.status).toBe(200);
-    expect(response.body.length).toBeGreaterThan(0);
+    expect(response.body.length).toBeGreaterThan(1);
   });
 
   test('GET /user/xxx should return the first user', async () => {
@@ -22,10 +22,10 @@ describe('USER', () => {
   });
 
   let user: User;
-  //Delete user to make sure test starts with a clean database
-  // beforeEach(async () => {
-  //   await supertest.delete(`/user/${mocks.mockUser.user.uid}`);
-  // });
+  test('Delete user should return 404 because user does not exist', async () => {
+    const response = await supertest.delete('/user/' + mocks.mockUser.user.uid);
+    expect(response.status).toBe(404);
+  });
 
   test('Post user with no data should return 400', async () => {
     const response = await supertest.post('/user');
