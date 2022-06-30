@@ -17,10 +17,7 @@ router.delete('/user/:uid', controllers.user.deleteUser);
 router.put('/user/:uid', controllers.user.updateUser);
 
 //Update technologies and languages
-router.post(
-  '/user/:uid/technologies',
-  controllers.technology.updateUserTechnologies
-);
+router.post('/user/:uid/technologies', controllers.technology.updateUserTechnologies);
 //TODO add languages
 // router.post('/user/:uid/languages', controllers.user.updateLanguages);
 
@@ -34,31 +31,16 @@ router.get('/helpRequest/:id', controllers.helpRequest.getHelpRequestById);
 router.get('/findHelpRequest?', controllers.helpRequest.findHelpRequests);
 
 router.post('/helpRequest', controllers.helpRequest.createHelpRequest);
-//TODO
-router.delete(
-  '/helpRequest?:helpRequestId',
-  controllers.helpRequest.deleteHelpRequest
-);
-
-//TODO maybe make a more readable route for this. Something like:
-// router.get('/helpRequests/:uid', controllers.helpRequest.getUserHelpRequestsByUid);
+router.delete('/helpRequest?', controllers.helpRequest.deleteHelpRequest);
+router.post('/helpRequest/:helpRequestId/:helpOfferId/solved', controllers.helpRequest.solvedHelpRequest);
 
 //HelpOffer ROUTES
 router.get('/helpOffers', controllers.helpOffer.getAllHelpOffers);
 router.get('/helpOffer/:id', controllers.helpOffer.getHelpOfferById);
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer',
-  controllers.helpOffer.createHelpOffer
-);
+router.post('/helpRequest/:helpRequestId/helpOffer', controllers.helpOffer.createHelpOffer);
 
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept',
-  controllers.helpOffer.acceptHelpOffer
-);
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline',
-  controllers.helpOffer.declineHelpOffer
-);
+router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept', controllers.helpOffer.acceptHelpOffer);
+router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline', controllers.helpOffer.declineHelpOffer);
 
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));

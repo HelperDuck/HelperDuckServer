@@ -1,7 +1,7 @@
 import { supertest } from '../testServer';
 import { describe, expect, test } from '@jest/globals';
 import mocks from '../mocks/index.mocks';
-import { HelpRequest, Prisma, User } from '@prisma/client';
+import { User } from '@prisma/client';
 
 describe('helpRequest', () => {
   //Comes from initial seeding of database
@@ -17,22 +17,16 @@ describe('helpRequest', () => {
   let helpRequestData: any;
 
   test('Delete user should return 404 because user does not exist', async () => {
-    const response = await supertest.delete(
-      '/user/' + mocks.mockHelpRequest.user.uid
-    );
+    const response = await supertest.delete('/user/' + mocks.mockHelpRequest.user.uid);
     expect(response.status).toBe(404);
   });
 
   test('POST /user should return 200 and return the new user', async () => {
-    const response = await supertest
-      .post('/user')
-      .send(mocks.mockHelpRequest.user);
+    const response = await supertest.post('/user').send(mocks.mockHelpRequest.user);
     expect(response.status).toBe(200);
     expect(response.body.userName).toBe('testUserHelpRequest');
     user = response.body;
   });
-
-  // mocks.mockHelpRequest.userId = user.id;
 
   //First get statement with false helpRequestId should return 404
   test('GET /helpRequest/uid should return 200 and return helpRequests', async () => {
@@ -46,9 +40,7 @@ describe('helpRequest', () => {
       userId: user.id,
       subject: 'TestHelpRequest',
     };
-    const response = await supertest
-      .post('/helpRequest')
-      .send(helpRequestDataSmall);
+    const response = await supertest.post('/helpRequest').send(helpRequestDataSmall);
     expect(response.status).toBe(200);
     helpRequest = response.body;
     expect(helpRequest.subject).toBe('TestHelpRequest');
@@ -64,25 +56,19 @@ describe('helpRequest', () => {
   });
 
   test('DELETE /helpRequest?helpRequestId=doesNotExists with no helpRequestId should return 404', async () => {
-    const response = await supertest.delete(
-      '/helpRequest?helpRequestId=doesNotExists'
-    );
+    const response = await supertest.delete('/helpRequest?helpRequestId=doesNotExists');
     expect(response.status).toBe(400);
     expect(response.text).toBe('HelpRequest was not a int');
   });
 
   test('DELETE /helpRequest/:helpRequestId that does not exists should return 404', async () => {
-    const response = await supertest.delete(
-      '/helpRequest?helpRequestId=999999'
-    );
+    const response = await supertest.delete('/helpRequest?helpRequestId=999999');
     expect(response.status).toBe(404);
     expect(response.text).toBe('Request not found');
   });
 
   test('DELETE /helpRequest/:helpRequestId should return 200 and return the deleted helpRequest', async () => {
-    const response = await supertest.delete(
-      '/helpRequest?helpRequestId=' + helpRequest.id
-    );
+    const response = await supertest.delete('/helpRequest?helpRequestId=' + helpRequest.id);
     expect(response.status).toBe(200);
     expect(response.body.id).toBe(helpRequest.id);
   });
@@ -100,9 +86,7 @@ describe('helpRequest', () => {
     helpRequest = response.body;
     expect(helpRequest.subject).toBe(helpRequestData.subject);
     expect(helpRequest.status).toBe('open');
-    expect(helpRequest.technologies.length).toBe(
-      helpRequestData.technologies.length
-    );
+    expect(helpRequest.technologies.length).toBe(helpRequestData.technologies.length);
     expect(helpRequest.user.id).toBe(helpRequestData.userId);
   });
 
@@ -126,14 +110,9 @@ describe('helpRequest', () => {
   });
 
   test('GET /findHelpRequest? should still return the helpRequests but with status canceled', async () => {
-    console.log(helpRequest.id);
-
-    const response = await supertest.get(
-      `/findHelpRequest?helpRequestId=${helpRequest.id}`
-    );
+    const response = await supertest.get(`/findHelpRequest?helpRequestId=${helpRequest.id}`);
     expect(response.status).toBe(200);
     expect(response.body.length).toBe(1);
     expect(response.body[0].status).toBe('cancelled');
-    // expect(response.body[0].status).toBe('canceled');
   });
 });

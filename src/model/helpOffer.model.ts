@@ -59,24 +59,21 @@ export async function createHelpOffer(helpOfferData: HelpOffer) {
   }
 }
 
-export async function updateHelpOffer(helpOfferData: HelpOffer) {
+export async function updateHelpOffer(helpOfferId: number, requestData: any) {
   try {
-    const helpOffer = await prisma.helpOffer.update({
+    const request = await prisma.helpOffer.update({
       where: {
-        id: helpOfferData.id,
+        id: helpOfferId,
       },
-      data: {
-        status: helpOfferData.status,
-      },
+      data: requestData,
       include: {
         user: true,
         helpRequest: true,
-        review: true,
       },
     });
-    return helpOffer;
+    return request;
   } catch (err) {
-    console.log('Error at Model-updateHelpOffer', err);
+    console.log('Error at Model-updateRequest', err);
     return null;
   }
 }
