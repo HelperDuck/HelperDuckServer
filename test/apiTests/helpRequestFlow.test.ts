@@ -48,7 +48,7 @@ describe('helpRequestRoute', () => {
   test('Decline helpOffer - POST /helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline should return 200 and return the new helpOffer', async () => {
     const response = await supertest.post(`/helpRequest/${helpRequest.id}/helpOffer/${helpOffer.id}/decline`);
     expect(response.status).toBe(200);
-    expect(response.body.userId).toBe('Siebe');
+    expect(response.body.user.userName).toBe('Siebe');
     expect(response.body.status).toBe('declined');
   });
 
