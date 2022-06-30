@@ -1,4 +1,5 @@
 import { PrismaClient, Prisma } from '@prisma/client';
+import { v4 } from 'uuid';
 
 const prisma = new PrismaClient();
 
@@ -11,13 +12,10 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
       description: 'I need some help with this',
       codeSnippet: 'console.log(helloWorld)',
       linkToSandbox: 'https://codesandbox.io/s/rlkjz2n43q',
-      roomId: 'testRoom',
+      roomId: v4(),
       tipGiven: 5,
       technologies: {
-        create: [
-          { technology: { connect: { name: 'Java' } } },
-          { technology: { connect: { name: 'Python' } } },
-        ],
+        create: [{ technology: { connect: { name: 'Java' } } }, { technology: { connect: { name: 'Python' } } }],
       },
       languages: {
         create: [{ language: { connect: { code: 'en' } } }],
@@ -54,12 +52,9 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
       description: 'I need some help with this',
       codeSnippet: 'console.log(helloWorld)',
       linkToSandbox: 'https://codesandbox.io/s/rlkjz2n43q',
-      roomId: 'testRoom',
+      roomId: v4(),
       technologies: {
-        create: [
-          { technology: { connect: { name: 'Java' } } },
-          { technology: { connect: { name: 'Python' } } },
-        ],
+        create: [{ technology: { connect: { name: 'Java' } } }, { technology: { connect: { name: 'Python' } } }],
       },
       languages: {
         create: [{ language: { connect: { code: 'en' } } }],
@@ -83,10 +78,7 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
       subject: 'how to start a pc',
       description: 'I need some help with this',
       technologies: {
-        create: [
-          { technology: { connect: { name: 'JavaScript' } } },
-          { technology: { connect: { name: 'Python' } } },
-        ],
+        create: [{ technology: { connect: { name: 'JavaScript' } } }, { technology: { connect: { name: 'Python' } } }],
       },
       languages: {
         create: [{ language: { connect: { code: 'en' } } }],
@@ -97,11 +89,9 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
       status: 'accepted',
       subject: 'how to start a pc',
       description: 'I need some help with this',
+      roomId: v4(),
       technologies: {
-        create: [
-          { technology: { connect: { name: 'JavaScript' } } },
-          { technology: { connect: { name: 'Python' } } },
-        ],
+        create: [{ technology: { connect: { name: 'JavaScript' } } }, { technology: { connect: { name: 'Python' } } }],
       },
       languages: {
         create: [{ language: { connect: { code: 'en' } } }],
@@ -113,10 +103,7 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
       subject: 'how to start a pc',
       description: 'I need some help with this',
       technologies: {
-        create: [
-          { technology: { connect: { name: 'JavaScript' } } },
-          { technology: { connect: { name: 'Python' } } },
-        ],
+        create: [{ technology: { connect: { name: 'JavaScript' } } }, { technology: { connect: { name: 'Python' } } }],
       },
       languages: {
         create: [{ language: { connect: { code: 'en' } } }],
@@ -127,7 +114,7 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
 
 function generateForAllUsers() {
   let dataForAllUsers: any[] = [];
-  for (let i = 1; i <= 5; i++) {
+  for (let i = 1; i <= 3; i++) {
     const input = [...generateInput(i)];
     dataForAllUsers.push(...input);
   }

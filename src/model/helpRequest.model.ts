@@ -121,14 +121,26 @@ export async function findHelpRequests(search: {
   }
 }
 
-export async function updateHelpRequestForUser(
-  userId: number,
-  requestData: any
-) {
+export async function updateHelpRequestForUser(userId: number, requestData: any) {
   try {
     const request = await prisma.helpRequest.updateMany({
       where: {
         userId: userId,
+      },
+      data: requestData,
+    });
+    return request;
+  } catch (err) {
+    console.log('Error at Model-updateRequest', err);
+    return null;
+  }
+}
+
+export async function updateHelpRequest(helpRequestId: number, requestData: any) {
+  try {
+    const request = await prisma.helpRequest.update({
+      where: {
+        id: helpRequestId,
       },
       data: requestData,
     });
