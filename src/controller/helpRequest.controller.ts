@@ -89,24 +89,49 @@ export async function deleteHelpRequest(req: Request, res: Response) {
 }
 
 export async function findHelpRequests(req: Request, res: Response) {
-  const search: {
-    helpRequestId?: number;
-    technologies?: string[];
+  const searchData: {
+    helpRequestId?: string;
+    technologies?: string;
     userUid?: string;
     userName?: string;
-    userId?: number;
+    userId?: string;
+    status?: string;
   } = req.query;
   //  ;
-  console.log('search:', search);
 
-  if (Object.keys(search).length === 0)
+  console.log(searchData);
+
+  if (Object.keys(searchData).length === 0)
     return res
       .status(400)
       .send(
         'No searchValues were provided, please use one of these: helpRequestId, technologies, userUid, userName, userId'
       );
-  // const requests = await model.helpRequest.findHelpRequests(search);
-  // if (!requests) return res.status(400).send('Error finding requests');
-  // return res.status(200).send(requests);
-  return res.status(200).send('Searching for requests');
+
+  const search: {
+    helpRequestId: number;
+    technologies: string[];
+    userUid: string;
+    userName: string;
+    userId: number;
+    status: string;
+  } = {
+    helpRequestId: searchData.helpRequestId
+      ? parseInt(searchData.helpRequestId)
+      : 0,
+    technologies: searchData.technologies
+      ? searchData.technologies.split(',')
+      : [],
+    userUid: searchData.userUid ? searchData.userUid : '',
+    userName: searchData.userName ? searchData.userName : '',
+    userId: searchData.userId ? parseInt(searchData.userId) : 0,
+    status: searchData.status ? searchData.status : '',
+  };
+
+  const foundHelpRequests = await model.helpRequest.findHelpRequests(search);
+  if (!foundHelpRequests) return res.status(400).send('Error finding requests');
+  if (foundHelpRequests.length === 0)
+    return res.status(404).send('No requests found');
+
+  return res.status(200).send(foundHelpRequests);
 }
