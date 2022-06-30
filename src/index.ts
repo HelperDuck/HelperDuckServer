@@ -58,9 +58,13 @@ io.on('connection', (socket: any) => {
     console.log('CallerId emitted from userHasJoined', data.callerId);
   });
 
-  socket.on('screenToggling', (data: any)=> {
-    console.log('testing screenToggling', data)
-    socket.broadcast.emit('screenToggling', data);
+  socket.on('screenToggling', (roomId: string) => {
+    console.log('testing screenToggling', roomId)
+      const participantsInRoom = participants[roomId];
+      console.log(participantsInRoom, 'participants AFTER ScreenToogling')
+      socket.broadcast.emit('renegotiate', participantsInRoom);
+    
+    
   })
   
   socket.on('disconnect', () => {
