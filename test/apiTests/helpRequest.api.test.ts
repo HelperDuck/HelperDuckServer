@@ -114,4 +114,10 @@ describe('helpRequest - API calls', () => {
     expect(response.status).toBe(200);
     expect(response.body.status).toBe('cancelled');
   });
+
+  test('DELETE /helpRequest/:helpRequestId should return 200 and return the deleted helpRequest (with languages and technologies)', async () => {
+    const response = await supertest.delete('/helpRequest?helpRequestId=' + helpRequest.id);
+    expect(response.status).toBe(200);
+    expect(response.body.id).toBe(helpRequest.id);
+  });
 });

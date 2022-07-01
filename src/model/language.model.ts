@@ -45,10 +45,7 @@ export async function createUsersToLanguages(languages: any, id: number) {
   }
 }
 
-export async function createHelpRequestToLanguages(
-  helpRequestId: number,
-  languages: any[]
-) {
+export async function createHelpRequestToLanguages(helpRequestId: number, languages: any[]) {
   try {
     return await prisma.helpRequest.update({
       where: {
@@ -64,6 +61,19 @@ export async function createHelpRequestToLanguages(
     });
   } catch (err) {
     console.log('Error at updateHelpRequestToLanguages Model', err);
+    return null;
+  }
+}
+
+export async function deleteHelpRequestFromLanguages(helpRequestId: number) {
+  try {
+    return await prisma.helpRequestsToLanguages.deleteMany({
+      where: {
+        helpRequestId: helpRequestId,
+      },
+    });
+  } catch (err) {
+    console.log('Error at deleteHelpRequestFromLanguages Model', err);
     return null;
   }
 }
