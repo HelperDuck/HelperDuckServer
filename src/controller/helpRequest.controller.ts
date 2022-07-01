@@ -1,3 +1,4 @@
+import { HelpRequest } from '@prisma/client';
 import { Request, Response } from 'express';
 import model from '../model/index.models';
 
@@ -20,8 +21,7 @@ export async function getHelpRequestById(req: Request, res: Response) {
 export async function createHelpRequest(req: Request, res: Response) {
   const requestData: any = req.body;
 
-  if (!requestData.userId || !requestData.subject)
-    return res.status(400).send('No userId or subject provided');
+  if (!requestData.userId || !requestData.subject) return res.status(400).send('No userId or subject provided');
 
   const user = await model.user.findUniqueUser({
     id: requestData.userId,
@@ -38,36 +38,139 @@ export async function createHelpRequest(req: Request, res: Response) {
   delete helpRequestUnnested.technologies;
   delete helpRequestUnnested.languages;
 
-  const helpRequestCreated = await model.helpRequest.createHelpRequest(
-    helpRequestUnnested
-  );
-  if (!helpRequestCreated)
-    return res.status(400).send('Error creating request');
+  const helpRequestCreated = await model.helpRequest.createHelpRequest(helpRequestUnnested);
+  if (!helpRequestCreated) return res.status(400).send('Error creating request');
 
   //Insert technologies
   if (technologies) {
-    const technologiesAdded =
-      await model.technology.createHelpRequestToTechnologies(
-        helpRequestCreated.id,
-        technologies
-      );
-    if (!technologiesAdded)
-      return res.status(400).send('Error adding technologies');
+    const technologiesAdded = await model.technology.createHelpRequestToTechnologies(
+      helpRequestCreated.id,
+      technologies
+    );
+    if (!technologiesAdded) return res.status(400).send('Error adding technologies');
   }
 
   //Insert languages
   if (languages) {
-    const languagesAdded = await model.language.createHelpRequestToLanguages(
-      helpRequestCreated.id,
-      languages
-    );
+    const languagesAdded = await model.language.createHelpRequestToLanguages(helpRequestCreated.id, languages);
     if (!languagesAdded) return res.status(400).send('Error adding languages');
   }
 
-  const helpRequestComplete = await model.helpRequest.getHelpRequestById(
-    helpRequestCreated.id
-  );
-  if (!helpRequestComplete)
-    return res.status(400).send('Error getting newly created HelpRequest');
+  const helpRequestComplete = await model.helpRequest.getHelpRequestById(helpRequestCreated.id);
+  if (!helpRequestComplete) return res.status(400).send('Error getting newly created HelpRequest');
+  return res.status(200).send(helpRequestComplete);
+}
+
+export async function deleteHelpRequest(req: Request, res: Response) {
+  let helpRequestIdObject = req.query.helpRequestId;
+  if (!helpRequestIdObject || typeof helpRequestIdObject !== 'string')
+    return res.status(400).send('No helpRequestId provided');
+
+  const helpRequestId = parseInt(helpRequestIdObject);
+  if (!helpRequestId) return res.status(400).send('HelpRequest was not a int');
+
+  const request = await model.helpRequest.getHelpRequestById(helpRequestId);
+  if (!request) return res.status(404).send('Request not found');
+
+  //we need to delete the technologies and languages first
+  const helpRequestUnnested = request;
+  const technologies = helpRequestUnnested.technologies;
+  const languages = helpRequestUnnested.languages;
+
+  console.log('technologies', technologies);
+
+  if (technologies) {
+    const technologiesDeleted = await model.technology.deleteHelpRequestFromTechnologies(helpRequestUnnested.id);
+    if (!technologiesDeleted) return res.status(400).send('Error deleting technologies');
+  }
+
+  if (languages) {
+    const languagesDeleted = await model.language.deleteHelpRequestFromLanguages(helpRequestUnnested.id);
+    if (!languagesDeleted) return res.status(400).send('Error deleting languages');
+  }
+
+  const deleted = await model.helpRequest.deleteHelpRequest(helpRequestId);
+  if (!deleted) return res.status(400).send('Error deleting request');
+  return res.status(200).send(deleted);
+}
+
+export async function findHelpRequests(req: Request, res: Response) {
+  const searchData: {
+    technologies?: string;
+    userUid?: string;
+    userName?: string;
+    userId?: string;
+    status?: string;
+    searchType?: string;
+  } = req.query;
+
+  if (Object.keys(searchData).length === 0)
+    return res
+      .status(400)
+      .send(
+        'No searchValues were provided, please use one of these: helpRequestId, technologies, userUid, userName, userId'
+      );
+
+  const search: {
+    technologies: string[];
+    userUid: string;
+    userName: string;
+    userId: number;
+    status: string;
+  } = {
+    technologies: searchData.technologies ? searchData.technologies.replace(/\s/g, '').split(',') : [],
+    userUid: searchData.userUid ? searchData.userUid : '',
+    userName: searchData.userName ? searchData.userName : '',
+    userId: searchData.userId ? parseInt(searchData.userId) : 0,
+    status: searchData.status ? searchData.status : 'open',
+  };
+
+  const searchType: string = searchData.searchType === 'AND' ? searchData.searchType : 'OR';
+
+  let foundHelpRequests: HelpRequest[] | null;
+
+  if (searchType === 'OR') {
+    foundHelpRequests = await model.helpRequest.findHelpRequestsOR(search);
+  } else {
+    foundHelpRequests = await model.helpRequest.findHelpRequestsAND(search);
+  }
+
+  if (!foundHelpRequests) return res.status(400).send('Error finding requests');
+  if (foundHelpRequests.length === 0) return res.status(404).send('No requests found');
+
+  return res.status(200).send(foundHelpRequests);
+}
+
+export async function solvedHelpRequest(req: Request, res: Response) {
+  const helpRequestId: number = parseInt(req.params.helpRequestId);
+  const helpOfferId: number = parseInt(req.params.helpOfferId);
+  if (!helpRequestId || !helpOfferId) return res.status(400).send('No helpRequestId provided');
+
+  const helpRequest = await model.helpRequest.getHelpRequestById(helpRequestId);
+  const helpOffer = await model.helpOffer.getHelpOfferById(helpOfferId);
+  if (!helpRequest || !helpOffer) return res.status(404).send('Request not found');
+
+  const helpRequestUpdateData = {
+    status: 'solved',
+    tipGiven: req.body.tipGiven ? req.body.tipGiven : 0,
+  };
+
+  const helpOfferUpdateData = {
+    status: 'solved',
+    tipReceived: req.body.tipGiven ? req.body.tipGiven : 0,
+  };
+
+  const helpRequestUpdated = await model.helpRequest.updateHelpRequest(helpRequest.id, helpRequestUpdateData);
+  if (!helpRequestUpdated) return res.status(400).send('Error updating request');
+
+  const helpOfferUpdated = await model.helpOffer.updateHelpOffer(helpOffer.id, helpOfferUpdateData);
+  if (!helpOfferUpdated) return res.status(400).send('Error updating offer');
+
+  const helpRequestComplete = await model.helpRequest.getHelpRequestById(helpRequestId);
+  if (!helpRequestComplete) return res.status(400).send('Error getting newly created HelpRequest');
+
+  const helpRequestSolved = await model.helpRequest.updateHelpRequest(helpRequestId, helpRequestUpdateData);
+  if (!helpRequestSolved) return res.status(400).send('Error updating request');
+
   return res.status(200).send(helpRequestComplete);
 }

@@ -1,4 +1,4 @@
-import { supertest } from './app';
+import { supertest } from './testServer';
 import { describe, expect, test } from '@jest/globals';
 
 describe('API CALLS', () => {

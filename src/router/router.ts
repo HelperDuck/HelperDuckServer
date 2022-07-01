@@ -5,7 +5,6 @@ const router = express.Router();
 
 router.get('/', (req, res) => {
   res.send('🦆🦆🦆🦆🦆Quack Quack Quack🦆🦆🦆🦆🦆');
-  console.log('server got request');
 });
 
 // everything will be uncommented as soon as fully implemented.
@@ -18,10 +17,7 @@ router.delete('/user/:uid', controllers.user.deleteUser);
 router.put('/user/:uid', controllers.user.updateUser);
 
 //Update technologies and languages
-router.post(
-  '/user/:uid/technologies',
-  controllers.technology.updateUserTechnologies
-);
+router.post('/user/:uid/technologies', controllers.technology.updateUserTechnologies);
 //TODO add languages
 // router.post('/user/:uid/languages', controllers.user.updateLanguages);
 
@@ -32,24 +28,20 @@ router.get('/languages', controllers.languages.getAllLanguages);
 //HelpRequest ROUTES
 router.get('/helpRequests', controllers.helpRequest.getAllHelpRequests);
 router.get('/helpRequest/:id', controllers.helpRequest.getHelpRequestById);
+router.get('/findHelpRequests?', controllers.helpRequest.findHelpRequests);
+
 router.post('/helpRequest', controllers.helpRequest.createHelpRequest);
+router.delete('/helpRequest?', controllers.helpRequest.deleteHelpRequest);
+router.post('/helpRequest/:helpRequestId/:helpOfferId/solved', controllers.helpRequest.solvedHelpRequest);
 
 //HelpOffer ROUTES
 router.get('/helpOffers', controllers.helpOffer.getAllHelpOffers);
+router.get('/findHelpOffers?', controllers.helpOffer.findHelpOffers);
 router.get('/helpOffer/:id', controllers.helpOffer.getHelpOfferById);
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer',
-  controllers.helpOffer.createHelpOffer
-);
+router.post('/helpRequest/:helpRequestId/helpOffer', controllers.helpOffer.createHelpOffer);
 
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept',
-  controllers.helpOffer.acceptHelpOffer
-);
-router.post(
-  '/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline',
-  controllers.helpOffer.declineHelpOffer
-);
+router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept', controllers.helpOffer.acceptHelpOffer);
+router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline', controllers.helpOffer.declineHelpOffer);
 
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));
