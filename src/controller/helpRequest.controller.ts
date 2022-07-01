@@ -72,6 +72,23 @@ export async function deleteHelpRequest(req: Request, res: Response) {
   const request = await model.helpRequest.getHelpRequestById(helpRequestId);
   if (!request) return res.status(404).send('Request not found');
 
+  //we need to delete the technologies and languages first
+  const helpRequestUnnested = request;
+  const technologies = helpRequestUnnested.technologies;
+  const languages = helpRequestUnnested.languages;
+
+  console.log('technologies', technologies);
+
+  if (technologies) {
+    const technologiesDeleted = await model.technology.deleteHelpRequestFromTechnologies(helpRequestUnnested.id);
+    if (!technologiesDeleted) return res.status(400).send('Error deleting technologies');
+  }
+
+  if (languages) {
+    const languagesDeleted = await model.language.deleteHelpRequestFromLanguages(helpRequestUnnested.id);
+    if (!languagesDeleted) return res.status(400).send('Error deleting languages');
+  }
+
   const deleted = await model.helpRequest.deleteHelpRequest(helpRequestId);
   if (!deleted) return res.status(400).send('Error deleting request');
   return res.status(200).send(deleted);

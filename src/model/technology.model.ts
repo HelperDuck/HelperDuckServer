@@ -46,10 +46,7 @@ export async function createUsersToTechnologies(technologies: any, id: number) {
   }
 }
 
-export async function createHelpRequestToTechnologies(
-  helpRequestId: number,
-  technologies: any[]
-) {
+export async function createHelpRequestToTechnologies(helpRequestId: number, technologies: any[]) {
   try {
     return await prisma.helpRequest.update({
       where: {
@@ -65,6 +62,20 @@ export async function createHelpRequestToTechnologies(
     });
   } catch (err) {
     console.log('Error at updateUsersToTechnologies Model', err);
+    return null;
+  }
+}
+
+export async function deleteHelpRequestFromTechnologies(helpRequestId: number) {
+  try {
+    console.log('deleteHelpRequestFromTechnologies', helpRequestId);
+    return await prisma.helpRequestsToTech.deleteMany({
+      where: {
+        helpRequestId: helpRequestId,
+      },
+    });
+  } catch (err) {
+    console.log('Error at deleteHelpRequestFromTechnologies Model', err);
     return null;
   }
 }
