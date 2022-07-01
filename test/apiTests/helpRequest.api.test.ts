@@ -3,7 +3,7 @@ import { describe, expect, test } from '@jest/globals';
 import mocks from '../mocks/index.mocks';
 import { User } from '@prisma/client';
 
-describe('helpRequest', () => {
+describe('helpRequest - API calls', () => {
   //Comes from initial seeding of database
   test('GET /helpRequests should return 200 and return helpRequests', async () => {
     const response = await supertest.get('/helpRequests');
