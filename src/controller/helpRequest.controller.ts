@@ -1,3 +1,4 @@
+import { HelpRequest } from '@prisma/client';
 import { Request, Response } from 'express';
 import model from '../model/index.models';
 
@@ -78,12 +79,12 @@ export async function deleteHelpRequest(req: Request, res: Response) {
 
 export async function findHelpRequests(req: Request, res: Response) {
   const searchData: {
-    helpRequestId?: string;
     technologies?: string;
     userUid?: string;
     userName?: string;
     userId?: string;
     status?: string;
+    searchType?: string;
   } = req.query;
 
   if (Object.keys(searchData).length === 0)
@@ -94,22 +95,29 @@ export async function findHelpRequests(req: Request, res: Response) {
       );
 
   const search: {
-    helpRequestId: number;
     technologies: string[];
     userUid: string;
     userName: string;
     userId: number;
     status: string;
   } = {
-    helpRequestId: searchData.helpRequestId ? parseInt(searchData.helpRequestId) : 0,
-    technologies: searchData.technologies ? searchData.technologies.split(',') : [],
+    technologies: searchData.technologies ? searchData.technologies.replace(/\s/g, '').split(',') : [],
     userUid: searchData.userUid ? searchData.userUid : '',
     userName: searchData.userName ? searchData.userName : '',
     userId: searchData.userId ? parseInt(searchData.userId) : 0,
-    status: searchData.status ? searchData.status : '',
+    status: searchData.status ? searchData.status : 'open',
   };
 
-  const foundHelpRequests = await model.helpRequest.findHelpRequests(search);
+  const searchType: string = searchData.searchType === 'AND' ? searchData.searchType : 'OR';
+
+  let foundHelpRequests: HelpRequest[] | null;
+
+  if (searchType === 'OR') {
+    foundHelpRequests = await model.helpRequest.findHelpRequestsOR(search);
+  } else {
+    foundHelpRequests = await model.helpRequest.findHelpRequestsAND(search);
+  }
+
   if (!foundHelpRequests) return res.status(400).send('Error finding requests');
   if (foundHelpRequests.length === 0) return res.status(404).send('No requests found');
 

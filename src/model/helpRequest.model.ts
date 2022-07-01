@@ -1,4 +1,4 @@
-import { HelpRequest, PrismaClient } from '@prisma/client';
+import { HelpRequest, PrismaClient, Technology } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function getAllHelpRequests() {
@@ -64,8 +64,7 @@ export async function deleteHelpRequest(helpRequestId: number) {
   }
 }
 
-export async function findHelpRequests(search: {
-  helpRequestId?: number;
+export async function findHelpRequestsOR(search: {
   technologies?: string[];
   userUid?: string;
   userName?: string;
@@ -77,25 +76,16 @@ export async function findHelpRequests(search: {
       where: {
         OR: [
           {
-            id: search.helpRequestId,
-          },
-          {
             status: search.status,
           },
+          {
+            OR: [
+              { user: { uid: search.userUid } },
+              { user: { userName: search.userName } },
+              { user: { id: search.userId } },
+            ],
+          },
 
-          {
-            userId: search.userId,
-          },
-          {
-            user: {
-              uid: search.userUid,
-            },
-          },
-          {
-            user: {
-              userName: search.userName,
-            },
-          },
           {
             technologies: {
               some: {
@@ -112,6 +102,97 @@ export async function findHelpRequests(search: {
         languages: { include: { language: true } },
         user: true,
         helpOffers: true,
+      },
+    });
+    return requests;
+  } catch (err) {
+    console.log('Error at Model-findRequests', err);
+    return null;
+  }
+}
+
+export async function findHelpRequestsAND(search: {
+  technologies?: string[];
+  userUid?: string;
+  userName?: string;
+  userId?: number;
+  status?: string;
+}) {
+  try {
+    search.status = search.status ? search.status : 'open';
+
+    if (search.technologies?.length === 0) {
+      let allTechnologiesData: Technology[] = await prisma.technology.findMany();
+      search.technologies = allTechnologiesData.map((tech) => tech.name);
+    }
+
+    console.log('search', search);
+
+    if (search.userName || (search.userId && search.userId > 0) || search.userUid) {
+      console.log('searchViaUser');
+      const findUser = await prisma.user.findFirst({
+        where: {
+          AND: [
+            {
+              OR: [{ uid: search.userUid }, { userName: search.userName }, { id: search.userId }],
+            },
+            {
+              helpRequests: {
+                some: {
+                  status: search.status,
+                  technologies: {
+                    some: {
+                      technology: {
+                        name: { in: search.technologies },
+                      },
+                    },
+                  },
+                },
+              },
+            },
+          ],
+        },
+
+        include: {
+          helpRequests: true,
+          // helpRequests: {
+          // include: {
+          //   technologies: { include: { technology: true } },
+          // languages: { include: { language: true } },
+          // user: true,
+          // helpOffers: true,
+          // },
+          // },
+        },
+      });
+
+      if (!findUser || !findUser.helpRequests) return null;
+
+      return findUser.helpRequests;
+    }
+    console.log('searchViaHelpRequests');
+    const requests = await prisma.helpRequest.findMany({
+      where: {
+        AND: [
+          {
+            status: search.status,
+          },
+          {
+            technologies: {
+              some: {
+                technology: {
+                  name: { in: search.technologies },
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        technologies: { include: { technology: true } },
+        // languages: { include: { language: true } },
+        // user: true,
+        // helpOffers: true,
       },
     });
     return requests;
