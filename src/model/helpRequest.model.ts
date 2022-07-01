@@ -170,7 +170,7 @@ export async function findHelpRequestsAND(search: {
 
       return findUser.helpRequests;
     }
-    console.log('searchViaHelpRequests');
+    // console.log('searchViaHelpRequests');
     const requests = await prisma.helpRequest.findMany({
       where: {
         AND: [
@@ -224,6 +224,24 @@ export async function updateHelpRequest(helpRequestId: number, requestData: any)
         id: helpRequestId,
       },
       data: requestData,
+    });
+    return request;
+  } catch (err) {
+    console.log('Error at Model-updateRequest', err);
+    return null;
+  }
+}
+
+export async function updateHelpRequestOnDeletion(userId: number) {
+  try {
+    const request = await prisma.helpRequest.updateMany({
+      where: {
+        userId: userId,
+        status: 'open',
+      },
+      data: {
+        status: 'cancelled',
+      },
     });
     return request;
   } catch (err) {

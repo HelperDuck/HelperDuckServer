@@ -150,7 +150,7 @@ export async function findHelpOffersByUserId(
   }
 ) {
   try {
-    console.log('search', search);
+    // console.log('search', search);
     const requests = await prisma.helpOffer.findMany({
       where: {
         AND: [{ userId: userId }, { status: search.status }],

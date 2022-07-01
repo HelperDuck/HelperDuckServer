@@ -42,15 +42,10 @@ export async function updateUser(req: Request, res: Response) {
 
   //Update technologies
   if (technologies) {
-    const deleteTech = await model.technology.deleteUsersToTechnologies(
-      updateRes.id
-    );
+    const deleteTech = await model.technology.deleteUsersToTechnologies(updateRes.id);
     console.log('deleteTech', deleteTech);
     if (!deleteTech) return res.status(400).send('Error deleting technologies');
-    const newTech = await model.technology.createUsersToTechnologies(
-      technologies,
-      updateRes.id
-    );
+    const newTech = await model.technology.createUsersToTechnologies(technologies, updateRes.id);
     if (!newTech) return res.status(400).send('Error creating technologies');
   }
 
@@ -66,11 +61,7 @@ export async function createNewUser(req: Request, res: Response) {
   if (!uid || !userName || !email) {
     return res
       .status(400)
-      .send(
-        `Missing fields in request: ${!uid ? 'uid' : ''} ${
-          !userName ? 'userName' : ''
-        } ${!email ? 'email' : ''}`
-      );
+      .send(`Missing fields in request: ${!uid ? 'uid' : ''} ${!userName ? 'userName' : ''} ${!email ? 'email' : ''}`);
   }
 
   //Check if no unique fields are double
@@ -89,19 +80,13 @@ export async function createNewUser(req: Request, res: Response) {
 
   //Update technologies
   if (technologies) {
-    const newTech = await model.technology.createUsersToTechnologies(
-      technologies,
-      newUser.id
-    );
+    const newTech = await model.technology.createUsersToTechnologies(technologies, newUser.id);
     if (!newTech) return res.status(400).send('Error creating technologies');
   }
 
   //Update languages
   if (languages) {
-    const newLang = await model.language.createUsersToLanguages(
-      languages,
-      newUser.id
-    );
+    const newLang = await model.language.createUsersToLanguages(languages, newUser.id);
     if (!newLang) return res.status(400).send('Error creating languages');
   }
 
@@ -122,12 +107,10 @@ export async function deleteUser(req: Request, res: Response) {
   const deleteLang = await model.language.deleteUsersToLanguages(user.id);
   if (!deleteLang) return res.status(400).send('Error deleting languages');
 
-  const cancelHelpRequests = await model.helpRequest.updateHelpRequestForUser(
-    user.id,
-    { status: 'cancelled' }
-  );
-  if (!cancelHelpRequests)
-    return res.status(400).send('Error cancelling help requests');
+  //TODO this puts
+  const cancelHelpRequests = await model.helpRequest.updateHelpRequestOnDeletion(user.id);
+
+  if (!cancelHelpRequests) return res.status(400).send('Error cancelling help requests');
 
   const deletedUser = await model.user.deleteUser(uid);
   if (!deletedUser) return res.status(400).send('Error deleting user');
