@@ -77,3 +77,92 @@ export async function updateHelpOffer(helpOfferId: number, requestData: any) {
     return null;
   }
 }
+
+export async function findHelpOffersOR(search: {
+  technologies?: string[];
+  userUid?: string;
+  userName?: string;
+  userId?: number;
+  status?: string;
+}) {
+  try {
+    const requests = await prisma.helpRequest.findMany({
+      where: {
+        OR: [
+          {
+            status: search.status,
+          },
+          {
+            OR: [
+              { user: { uid: search.userUid } },
+              { user: { userName: search.userName } },
+              { user: { id: search.userId } },
+            ],
+          },
+
+          {
+            technologies: {
+              some: {
+                technology: {
+                  name: { in: search.technologies },
+                },
+              },
+            },
+          },
+        ],
+      },
+      include: {
+        technologies: { include: { technology: true } },
+        languages: { include: { language: true } },
+        user: true,
+        helpOffers: true,
+      },
+    });
+    return requests;
+  } catch (err) {
+    console.log('Error at Model-findRequests', err);
+    return null;
+  }
+}
+
+export async function findHelpOffersAND(search: {
+  technologies?: string[];
+  userUid?: string;
+  userName?: string;
+  userId?: number;
+  status?: string;
+}) {
+  try {
+    search.status = search.status ? search.status : 'solved';
+
+    return null;
+  } catch (err) {
+    console.log('Error at Model-findRequests', err);
+    return null;
+  }
+}
+
+export async function findHelpOffersByUserId(
+  userId: number,
+  search: {
+    technologies?: string[];
+    status?: string;
+  }
+) {
+  try {
+    // console.log('search', search);
+    const requests = await prisma.helpOffer.findMany({
+      where: {
+        AND: [{ userId: userId }, { status: search.status }],
+      },
+      include: {
+        helpRequest: true,
+        review: true,
+      },
+    });
+    return requests;
+  } catch (err) {
+    console.log('Error at Model-findRequests', err);
+    return null;
+  }
+}

@@ -28,7 +28,7 @@ router.get('/languages', controllers.languages.getAllLanguages);
 //HelpRequest ROUTES
 router.get('/helpRequests', controllers.helpRequest.getAllHelpRequests);
 router.get('/helpRequest/:id', controllers.helpRequest.getHelpRequestById);
-router.get('/findHelpRequest?', controllers.helpRequest.findHelpRequests);
+router.get('/findHelpRequests?', controllers.helpRequest.findHelpRequests);
 
 router.post('/helpRequest', controllers.helpRequest.createHelpRequest);
 router.delete('/helpRequest?', controllers.helpRequest.deleteHelpRequest);
@@ -36,6 +36,7 @@ router.post('/helpRequest/:helpRequestId/:helpOfferId/solved', controllers.helpR
 
 //HelpOffer ROUTES
 router.get('/helpOffers', controllers.helpOffer.getAllHelpOffers);
+router.get('/findHelpOffers?', controllers.helpOffer.findHelpOffers);
 router.get('/helpOffer/:id', controllers.helpOffer.getHelpOfferById);
 router.post('/helpRequest/:helpRequestId/helpOffer', controllers.helpOffer.createHelpOffer);
 
