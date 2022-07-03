@@ -80,3 +80,11 @@ export const helpRequestTotal = {
     },
   ],
 };
+
+export const solvedBody = {
+  tipGiven: 10,
+  review: {
+    rating: 5,
+    comment: 'Super good session',
+  },
+};

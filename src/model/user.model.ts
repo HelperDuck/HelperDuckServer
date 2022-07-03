@@ -15,12 +15,7 @@ export async function findUniqueUser({
   try {
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { uid: uid },
-          { userName: userName },
-          { email: email },
-          { id: id },
-        ],
+        OR: [{ uid: uid }, { userName: userName }, { email: email }, { id: id }],
       },
       // include: {
       //   helpRequests: true,
@@ -44,7 +39,7 @@ export async function findUserComplete(uid: string) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
-        helpOffers: { include: { review: true } },
+        helpOffers: { include: { reviews: true } },
         helpRequests: true,
         reviews: true,
       },

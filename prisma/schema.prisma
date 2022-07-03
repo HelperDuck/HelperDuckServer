@@ -23,7 +23,7 @@ model User {
   avgTip        Decimal               @default(20.21)
   tipsReceived  Decimal               @default(0)
   tipsGiven     Decimal               @default(0)
-  rating        Decimal               @default(5.21)
+  rating        Decimal               @default(4.21)
   credits       Decimal               @default(10)
   helpOffers    HelpOffer[]
   helpRequests  HelpRequest[]
@@ -84,31 +84,33 @@ model HelpRequest {
   helpOffers    HelpOffer[]
   languages     HelpRequestsToLanguages[]
   technologies  HelpRequestsToTech[]
+  reviews       Review[]
 }
 
 model HelpOffer {
-  id            Int         @id @default(autoincrement())
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @default(now())
+  id            Int          @id @default(autoincrement())
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @default(now())
   userId        Int
-  helpSessionId Int?
-  status        String?     @default("open")
-  helpRequestId Int
-  helpRequest   HelpRequest @relation(fields: [helpRequestId], references: [id])
-  user          User        @relation(fields: [userId], references: [id])
-  review        Review?     @relation(fields: [reviewId], references: [id])
-  reviewId      Int?
-  tipReceived   Decimal     @default(0)
+  status        String?      @default("open")
+  helpRequestId Int?
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  user          User         @relation(fields: [userId], references: [id])
+  reviews       Review[]
+  tipReceived   Decimal      @default(0)
 }
 
 model Review {
-  id        Int         @id @default(autoincrement())
-  rating    Int?        @default(5)
-  comment   String?
-  role      String      @default("Helper")
-  helpOffer HelpOffer[]
-  user      User?       @relation(fields: [userId], references: [id])
-  userId    Int?
+  id            Int          @id @default(autoincrement())
+  rating        Int?         @default(5)
+  comment       String?
+  role          String       @default("helpGiver")
+  helpOffer     HelpOffer?   @relation(fields: [helpOfferId], references: [id])
+  helpOfferId   Int?
+  helpRequest   HelpRequest? @relation(fields: [helpRequestId], references: [id])
+  helpRequestId Int?
+  user          User?        @relation(fields: [userId], references: [id])
+  userId        Int?
 }
 
 model HelpRequestsToTech {

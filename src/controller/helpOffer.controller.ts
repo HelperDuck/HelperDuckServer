@@ -17,7 +17,15 @@ export async function getHelpOfferById(req: Request, res: Response) {
   return res.status(200).send(helpOffer);
 }
 
-export async function createHelpOffer(req: Request, res: Response) {
+export async function createHelpOfferDecline(req: Request, res: Response) {
+  createHelpOffer(req, res, 'declined');
+}
+
+export async function createHelpOfferOpen(req: Request, res: Response) {
+  createHelpOffer(req, res, 'open');
+}
+
+export async function createHelpOffer(req: Request, res: Response, status: string) {
   const helpRequestId = parseInt(req.params.helpRequestId);
   if (!helpRequestId) return res.status(400).send('No helpRequestId provided');
 
@@ -41,7 +49,7 @@ export async function createHelpOffer(req: Request, res: Response) {
       helpOffer: helpOfferExists,
     });
 
-  const createdHelpOffer = await model.helpOffer.createHelpOffer(helpOfferData);
+  const createdHelpOffer = await model.helpOffer.createHelpOffer(helpOfferData, status);
   if (!createdHelpOffer) return res.status(400).send('Error creating helpOffer');
 
   return res.status(200).send(createdHelpOffer);

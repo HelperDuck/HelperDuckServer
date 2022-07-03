@@ -115,6 +115,11 @@ describe('helpRequest - API calls', () => {
     expect(response.body.status).toBe('cancelled');
   });
 
+  test('add a new HelpOffer to the helpRequest', async () => {
+    const response = await supertest.post(`/helpRequest/${helpRequest.id}/helpOffer`).send({ userId: 2 });
+    expect(response.status).toBe(200);
+  });
+
   test('DELETE /helpRequest/:helpRequestId should return 200 and return the deleted helpRequest (with languages and technologies)', async () => {
     const response = await supertest.delete('/helpRequest?helpRequestId=' + helpRequest.id);
     expect(response.status).toBe(200);
