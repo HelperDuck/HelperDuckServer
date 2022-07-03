@@ -1,4 +1,4 @@
-import { HelpOffer, HelpRequest, PrismaClient } from '@prisma/client';
+import { HelpOffer, PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 export async function getAllHelpOffers() {
@@ -7,7 +7,7 @@ export async function getAllHelpOffers() {
       include: {
         user: true,
         helpRequest: true,
-        review: true,
+        reviews: true,
       },
     });
     return helpOffers;
@@ -26,7 +26,7 @@ export async function getHelpOfferById(id: number) {
       include: {
         user: true,
         helpRequest: true,
-        review: true,
+        reviews: true,
         // helpSession: true,
       },
     });
@@ -37,18 +37,19 @@ export async function getHelpOfferById(id: number) {
   }
 }
 
-export async function createHelpOffer(helpOfferData: HelpOffer) {
+export async function createHelpOffer(helpOfferData: HelpOffer, status: string) {
   try {
+    if (!helpOfferData.helpRequestId) return null;
     const helpOffer = await prisma.helpOffer.create({
       data: {
         user: { connect: { id: helpOfferData.userId } },
         helpRequest: { connect: { id: helpOfferData.helpRequestId } },
-        status: 'open',
+        status: status,
       },
       include: {
         user: true,
         helpRequest: true,
-        review: true,
+        reviews: true,
         // helpSession: true,
       },
     });
@@ -157,7 +158,7 @@ export async function findHelpOffersByUserId(
       },
       include: {
         helpRequest: true,
-        review: true,
+        reviews: true,
       },
     });
     return requests;

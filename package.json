@@ -14,7 +14,8 @@
     "build": "tsc && npm run build-db",
     "build-server": "tsc",
     "build-db": "npx prisma db push --accept-data-loss && npx prisma migrate reset -f",
-    "build-db-dev": "npx prisma migrate dev --name init && npx prisma migrate reset -f"
+    "build-db-dev": "npx prisma migrate dev --name init && npx prisma migrate reset -f",
+    "edit-db": "npx prisma studio"
   },
   "repository": {
     "type": "git",

@@ -77,8 +77,6 @@ export async function deleteHelpRequest(req: Request, res: Response) {
   const technologies = helpRequestUnnested.technologies;
   const languages = helpRequestUnnested.languages;
 
-  console.log('technologies', technologies);
-
   if (technologies) {
     const technologiesDeleted = await model.technology.deleteHelpRequestFromTechnologies(helpRequestUnnested.id);
     if (!technologiesDeleted) return res.status(400).send('Error deleting technologies');
@@ -144,15 +142,23 @@ export async function findHelpRequests(req: Request, res: Response) {
 export async function solvedHelpRequest(req: Request, res: Response) {
   const helpRequestId: number = parseInt(req.params.helpRequestId);
   const helpOfferId: number = parseInt(req.params.helpOfferId);
-  if (!helpRequestId || !helpOfferId) return res.status(400).send('No helpRequestId provided');
+  if (!helpRequestId || !helpOfferId) return res.status(400).send('No helpRequestId / helpOfferId provided');
 
   const helpRequest = await model.helpRequest.getHelpRequestById(helpRequestId);
   const helpOffer = await model.helpOffer.getHelpOfferById(helpOfferId);
-  if (!helpRequest || !helpOffer) return res.status(404).send('Request not found');
+  if (!helpRequest || !helpOffer) return res.status(404).send('Request / HelpOffer not found');
+
+  if (helpRequest.status !== 'open') return res.status(400).send('Request is not open');
+  if (helpOffer.status !== 'open' && helpOffer.status !== 'accepted')
+    return res.status(400).send('HelpOffer is not open');
+  if (helpRequest.id !== helpOffer.helpRequestId) {
+    return res.status(400).send('HelpOffer does not belong to this request');
+  }
 
   const helpRequestUpdateData = {
     status: 'solved',
     tipGiven: req.body.tipGiven ? req.body.tipGiven : 0,
+    // reviews: req.body.Review ? req.body.Review : [],
   };
 
   const helpOfferUpdateData = {
@@ -166,11 +172,7 @@ export async function solvedHelpRequest(req: Request, res: Response) {
   const helpOfferUpdated = await model.helpOffer.updateHelpOffer(helpOffer.id, helpOfferUpdateData);
   if (!helpOfferUpdated) return res.status(400).send('Error updating offer');
 
-  const helpRequestComplete = await model.helpRequest.getHelpRequestById(helpRequestId);
-  if (!helpRequestComplete) return res.status(400).send('Error getting newly created HelpRequest');
-
-  const helpRequestSolved = await model.helpRequest.updateHelpRequest(helpRequestId, helpRequestUpdateData);
-  if (!helpRequestSolved) return res.status(400).send('Error updating request');
+  const helpRequestComplete = await model.helpRequest.getHelpRequestById(helpRequest.id);
 
   return res.status(200).send(helpRequestComplete);
 }

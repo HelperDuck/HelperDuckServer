@@ -26,7 +26,7 @@ function generateInput(userId: number): Prisma.HelpRequestCreateInput[] {
             user: { connect: { id: userId + 1 } },
             status: 'accepted',
             tipReceived: 5,
-            review: {
+            reviews: {
               create: {
                 rating: 5,
                 comment: 'This is a good help session',

@@ -28,7 +28,8 @@ export async function getHelpRequestById(id: number) {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
         user: true,
-        helpOffers: true,
+        helpOffers: { include: { user: true } },
+        reviews: true,
       },
     });
     return request;
