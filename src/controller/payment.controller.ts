@@ -15,7 +15,7 @@ const stripe = new Stripe(SUPER_SECRET_KEY, {
   apiVersion: '2020-08-27',
 });
 
-export default async (req: Request, res: Response) => {
+export async function createPayment(req: Request, res: Response) {
   if (req.method === "POST") {
     try {
       const { amount } = req.body;

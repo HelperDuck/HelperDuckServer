@@ -53,6 +53,11 @@ router.get('/helpReviews', controllers.helpReview.getallHelpReviews);
 // router.get('/review/:id', controllers.review.getReviewById);
 router.post('/helpReview', controllers.helpReview.createHelpReview);
 
+
+//Payment Routes
+router.post('/payment/create', controllers.payment.createPayment);
+
+
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));
 router.post('*', (req, res) => res.status(404).send('404 Not Found'));
