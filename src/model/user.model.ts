@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime';
 const prisma = new PrismaClient();
 
 export async function findUniqueUser({
@@ -103,6 +104,33 @@ export async function getAllUsers() {
     return users;
   } catch (err) {
     console.log('Error at Model-getAllUsers', err);
+    return null;
+  }
+}
+
+export async function changeCredits(
+  user: User,
+  mutation: { tipsReceived?: Decimal; tipsGiven?: Decimal; creditsBought?: Decimal }
+) {
+  try {
+    const creditsBought = mutation.creditsBought || new Decimal(0);
+    const tipsReceived = mutation.tipsReceived || new Decimal(0);
+    const tipsGiven = mutation.tipsGiven || new Decimal(0);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        credits: new Decimal(user.credits).add(creditsBought).add(tipsReceived).minus(tipsGiven),
+        tipsReceived: new Decimal(user.tipsReceived).add(tipsReceived),
+        tipsGiven: new Decimal(user.tipsGiven).add(tipsGiven),
+      },
+    });
+
+    return updatedUser;
+  } catch (err) {
+    console.log('Error at Model-changeCredits', err);
     return null;
   }
 }

@@ -48,6 +48,9 @@ export async function createHelpOfferReview(helpReviewData: any) {
     const helpReview = await prisma.review.create({
       data: {
         user: { connect: { id: helpReviewData.userId ? parseInt(helpReviewData.userId) : undefined } },
+        helpRequest: {
+          connect: { id: helpReviewData.helpRequestId ? parseInt(helpReviewData.helpRequestId) : undefined },
+        },
         helpOffer: { connect: { id: helpReviewData.helpOfferId ? parseInt(helpReviewData.helpOfferId) : undefined } },
         rating: parseInt(helpReviewData.rating),
         comment: helpReviewData.comment,

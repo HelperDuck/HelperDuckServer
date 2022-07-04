@@ -1,6 +1,7 @@
 import { HelpRequest } from '@prisma/client';
 import { Request, Response } from 'express';
 import model from '../model/index.models';
+import { Decimal } from '@prisma/client/runtime';
 
 //helpRequests related functions
 
@@ -155,15 +156,30 @@ export async function solvedHelpRequest(req: Request, res: Response) {
     return res.status(400).send('HelpOffer does not belong to this request');
   }
 
+  const tip = req.body.tipGiven ? req.body.tipGiven : 0;
+
   const helpRequestUpdateData = {
     status: 'solved',
-    tipGiven: req.body.tipGiven ? req.body.tipGiven : 0,
-    // reviews: req.body.Review ? req.body.Review : [],
+    tipGiven: tip,
   };
+
+  if (req.body.review) {
+    const helpOfferReviewData = {
+      rating: req.body.review.rating,
+      comment: req.body.review.comment,
+      helpOfferId: helpOfferId,
+      helpRequestId: helpRequestId,
+      userId: helpOffer.userId,
+      role: 'helpGiver',
+    };
+
+    const helpOfferReview = await model.helpReview.createHelpOfferReview(helpOfferReviewData);
+    if (!helpOfferReview) return res.status(400).send('Error creating helpOfferReview');
+  }
 
   const helpOfferUpdateData = {
     status: 'solved',
-    tipReceived: req.body.tipGiven ? req.body.tipGiven : 0,
+    tipReceived: tip,
   };
 
   const helpRequestUpdated = await model.helpRequest.updateHelpRequest(helpRequest.id, helpRequestUpdateData);
@@ -171,6 +187,15 @@ export async function solvedHelpRequest(req: Request, res: Response) {
 
   const helpOfferUpdated = await model.helpOffer.updateHelpOffer(helpOffer.id, helpOfferUpdateData);
   if (!helpOfferUpdated) return res.status(400).send('Error updating offer');
+
+  //edits credits of users
+  //HelpAsker
+  if (!helpRequest.user || !helpOffer.user) return res.status(400).send('Error updating credits');
+  const helpAsker = await model.user.changeCredits(helpRequest.user, { tipsGiven: tip });
+  if (!helpAsker) return res.status(400).send('Error updating credits');
+  //HelpGiver
+  const helpGiver = await model.user.changeCredits(helpOffer.user, { tipsReceived: tip });
+  if (!helpGiver) return res.status(400).send('Error updating credits');
 
   const helpRequestComplete = await model.helpRequest.getHelpRequestById(helpRequest.id);
 

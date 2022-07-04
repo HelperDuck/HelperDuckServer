@@ -2,6 +2,7 @@ import { supertest } from '../testServer';
 import { describe, expect, test } from '@jest/globals';
 import mocks from '../mocks/index.mocks';
 import { User } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime';
 
 describe('User', () => {
   test('GET /users should return 200 and return users', async () => {
@@ -45,18 +46,32 @@ describe('User', () => {
   });
 
   test('POST /user/:uid/technologies should return 200 and return the new technology', async () => {
-    const response = await supertest
-      .post(`/user/${user.uid}/technologies`)
-      .send(mocks.mockUser.updateTechnology);
+    const response = await supertest.post(`/user/${user.uid}/technologies`).send(mocks.mockUser.updateTechnology);
     expect(response.status).toBe(200);
   });
 
   test('PUT /user/:uid should return 200 and return the updated user', async () => {
-    const response = await supertest
-      .put(`/user/${user.uid}`)
-      .send(mocks.mockUser.updateUser);
+    const response = await supertest.put(`/user/${user.uid}`).send(mocks.mockUser.updateUser);
     expect(response.status).toBe(200);
     expect(response.body.userName).toBe('testUserUpdate');
+  });
+
+  test('add credits without superSecret should return 400', async () => {
+    const response = await supertest.post(`/user/${user.uid}/addCredits`).send({ creditsBought: '10' });
+    expect(response.status).toBe(400);
+    expect(response.text).toBe('Not authorized');
+  });
+
+  test('add credits should add credits to user', async () => {
+    const creditsObject = {
+      creditsBought: '10',
+      superSecret: 'superSecret',
+    };
+
+    const response = await supertest.post(`/user/${user.uid}/addCredits`).send(creditsObject);
+
+    expect(response.status).toBe(200);
+    expect(response.body.credits).toBe(new Decimal(user.credits).add(creditsObject.creditsBought).toString());
   });
 
   test('Delete user should return 200', async () => {

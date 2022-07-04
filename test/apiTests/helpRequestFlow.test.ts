@@ -9,11 +9,14 @@ describe('helpRequestRoute', () => {
 
   //User 1 makes a helpRequest
   let user: User;
+  let requestSolver: User;
   let helpRequest: any;
   let helpRequestData: any;
   let helpOffer: any;
   let solvedRequest: any;
+
   let creditRequestUser: Decimal;
+  let creditOfferUser: Decimal;
 
   //Get user test (id = 1 uid = test)
   test('GET /user/test should return 200 and return user 1', async () => {
@@ -22,6 +25,29 @@ describe('helpRequestRoute', () => {
     expect(response.body.userName).toBe('test');
     user = response.body;
     creditRequestUser = user.credits;
+  });
+
+  //Add credits to user so that user can make a helpRequest
+  //TODO: Make add function to add credits securely
+  test('POST /user/test/credits should return 200 and add 10 credits to user 1', async () => {
+    const creditsObject = {
+      creditsBought: '10',
+      superSecret: 'superSecret',
+    };
+
+    const response = await supertest.post(`/user/${user.uid}/addCredits`).send(creditsObject);
+    expect(response.status).toBe(200);
+    expect(parseInt(response.body.credits)).toBe(new Decimal(creditRequestUser).add(10).toNumber());
+    creditRequestUser = new Decimal(response.body.credits);
+    user.credits = creditRequestUser;
+  });
+
+  test('GET request solver', async () => {
+    const response = await supertest.get('/user/AfAM70bjo9MHY8bzzD1DIeDhNxP2');
+    expect(response.status).toBe(200);
+    expect(response.body.userName).toBe('Noel');
+    requestSolver = response.body;
+    creditOfferUser = requestSolver.credits;
   });
 
   //Create a helpRequest with all data
@@ -98,7 +124,19 @@ describe('helpRequestRoute', () => {
     //needs to be third helpOffer since the first and second are declined
     expect(solvedRequest.helpOffers[2].status).toBe('solved');
     expect(parseInt(solvedRequest.helpOffers[2].tipReceived)).toBe(10);
-    // expect(solvedRequest.reviews.length).toBeGreaterThan(0);
-    // expect(new Decimal(response.body.user.credits)).toBe(new Decimal(creditRequestUser).plus(10));
+    expect(solvedRequest.reviews.length).toBeGreaterThan(0);
+  });
+
+  //Test if the credits are added and subtracted correctly
+  test('new credits for helpGiver and helpAsker should be correctly be exchanged', async () => {
+    const response = await supertest.get('/user/test');
+    expect(response.status).toBe(200);
+    user = response.body;
+    expect(response.body.credits).toBe(new Decimal(creditRequestUser).minus(10).toString());
+
+    const response2 = await supertest.get('/user/AfAM70bjo9MHY8bzzD1DIeDhNxP2');
+    expect(response2.status).toBe(200);
+    user = response2.body;
+    expect(response2.body.credits).toBe(new Decimal(creditOfferUser).plus(10).toString());
   });
 });
