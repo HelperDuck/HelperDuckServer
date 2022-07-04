@@ -117,7 +117,7 @@ export async function changeCredits(
     const tipsReceived = mutation.tipsReceived || new Decimal(0);
     const tipsGiven = mutation.tipsGiven || new Decimal(0);
 
-    const updatedUser = await prisma.user.update({
+    let updatedUser: User | null = await prisma.user.update({
       where: {
         id: user.id,
       },
@@ -128,9 +128,39 @@ export async function changeCredits(
       },
     });
 
+    if (new Decimal(tipsGiven).greaterThan(0)) updatedUser = await recalculateAvgTipGiven(updatedUser);
+
     return updatedUser;
   } catch (err) {
     console.log('Error at Model-changeCredits', err);
+    return null;
+  }
+}
+
+async function recalculateAvgTipGiven(user: User) {
+  try {
+    const totalHelpRequests = await prisma.helpRequest.count({
+      where: {
+        userId: user.id,
+
+        status: 'solved',
+      },
+    });
+
+    const avgTipGiven = new Decimal(user.tipsGiven).div(totalHelpRequests);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        avgTip: avgTipGiven,
+      },
+    });
+
+    return updatedUser;
+  } catch (err) {
+    console.log('Error at Model-recalculateAvgTipGiven', err);
     return null;
   }
 }

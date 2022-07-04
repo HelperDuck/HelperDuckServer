@@ -3,7 +3,7 @@ import { describe, expect, test } from '@jest/globals';
 import mocks from '../mocks/index.mocks';
 
 const helpRequestReview = {
-  rating: '4',
+  rating: '5',
   comment: 'This is a comment',
   // role: 'helpAsker', done in controller
   userId: '2',
@@ -11,7 +11,7 @@ const helpRequestReview = {
 };
 
 const helpOfferReview = {
-  rating: '4',
+  rating: '5',
   comment: 'This is a comment',
   // role: 'helpGiver', done in controller
   userId: '1',

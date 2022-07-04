@@ -126,7 +126,7 @@ export async function addCredits(req: Request, res: Response) {
   const user = await model.user.findUniqueUser({ uid });
   if (!user) return res.status(404).send('User not found');
 
-  const creditsBought = new Decimal(req.body.creditsBought);
+  const creditsBought = new Decimal(parseInt(req.body.creditsBought));
   if (!creditsBought) return res.status(400).send('No creditsBought provided');
 
   if (req.body.superSecret !== 'superSecret') return res.status(400).send('Not authorized');

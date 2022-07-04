@@ -62,9 +62,50 @@ export async function createHelpOfferReview(helpReviewData: any) {
         helpRequest: true,
       },
     });
-    return helpReview;
+
+    const updatedUser = await recalculateRating(helpReviewData.userId);
+
+    return updatedUser;
   } catch (err) {
     console.log('Error at Model-createHelpReview', err);
+    return null;
+  }
+}
+
+async function recalculateRating(userId: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: parseInt(userId) },
+      include: {
+        reviews: true,
+      },
+    });
+
+    if (!user || !user.reviews || user.reviews.length === 0) return null;
+
+    const reviews = user.reviews;
+    let rating = 0;
+    let count = 0;
+    reviews.forEach((review: Review) => {
+      if (review.rating) {
+        rating += review.rating;
+        count++;
+      }
+    });
+
+    rating = rating / count;
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
+      data: { rating: rating },
+      include: {
+        reviews: true,
+        helpOffers: true,
+        helpRequests: true,
+      },
+    });
+    return updatedUser;
+  } catch (err) {
+    console.log('Error at Model-recalculateRating', err);
     return null;
   }
 }

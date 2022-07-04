@@ -62,14 +62,13 @@ describe('User', () => {
     expect(response.text).toBe('Not authorized');
   });
 
-  test('add credits should add credits to user', async () => {
+  test('POST /user/test/credits should return 200 and add 10 credits to new User', async () => {
     const creditsObject = {
-      creditsBought: '10',
+      creditsBought: 10,
       superSecret: 'superSecret',
     };
 
     const response = await supertest.post(`/user/${user.uid}/addCredits`).send(creditsObject);
-
     expect(response.status).toBe(200);
     expect(response.body.credits).toBe(new Decimal(user.credits).add(creditsObject.creditsBought).toString());
   });
