@@ -29,6 +29,18 @@ export async function createHelpReview(req: Request, res: Response) {
   if (!reviewData.userId) return res.status(400).send('Please provide userId');
   if (!reviewData.rating) return res.status(400).send('Please provide rating');
 
+  //Checks if objects are valid
+  if (reviewData.helpRequestId) {
+    const helpRequest = await model.helpRequest.getHelpRequestById(parseInt(reviewData.helpRequestId));
+    if (!helpRequest) return res.status(404).send('HelpOffer not found');
+  }
+
+  let helpOffer: any;
+  if (reviewData.helpOfferId) {
+    helpOffer = await model.helpOffer.getHelpOfferById(parseInt(reviewData.helpOfferId));
+    if (!helpOffer) return res.status(404).send('HelpOffer not found');
+  }
+
   const user = await model.user.findUniqueUser({ id: parseInt(reviewData.userId) });
   if (!user) return res.status(404).send('User not found');
 
@@ -38,6 +50,7 @@ export async function createHelpReview(req: Request, res: Response) {
     createdReview = await createHelpRequestReview(reviewData);
   } else if (reviewData.helpOfferId) {
     reviewData.role = 'helpGiver';
+    reviewData.helpRequestId = helpOffer.helpRequestId;
     createdReview = await createHelpOfferReview(reviewData);
   }
 
@@ -57,7 +70,6 @@ async function createHelpRequestReview(reviewData: {
   if (!helpRequest) return null;
 
   const review = await model.helpReview.createHelpRequestReview(reviewData);
-  console.log('review', review);
   if (!review) return null;
 
   return review;
@@ -69,6 +81,7 @@ async function createHelpOfferReview(reviewData: {
   role: string;
   userId: string;
   helpOfferId?: string;
+  helpRequestId?: string;
 }) {
   if (!reviewData.helpOfferId) return null;
   const helpRequest = await model.helpOffer.getHelpOfferById(parseInt(reviewData.helpOfferId));

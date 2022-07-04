@@ -15,6 +15,7 @@ router.get('/user/:uid', controllers.user.getUser);
 router.post('/user', controllers.user.createNewUser);
 router.delete('/user/:uid', controllers.user.deleteUser);
 router.put('/user/:uid', controllers.user.updateUser);
+router.post('/user/:uid/addCredits', controllers.user.addCredits);
 
 //Update technologies and languages
 router.post('/user/:uid/technologies', controllers.technology.updateUserTechnologies);
