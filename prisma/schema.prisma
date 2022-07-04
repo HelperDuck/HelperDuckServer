@@ -20,11 +20,11 @@ model User {
   createdAt     DateTime              @default(now())
   updatedAt     DateTime              @default(now())
   //This need to be replaced by queries in model
-  avgTip        Decimal               @default(20.21)
-  tipsReceived  Decimal               @default(0)
-  tipsGiven     Decimal               @default(0)
-  rating        Decimal               @default(4.21)
-  credits       Decimal               @default(10)
+  avgTip        Decimal               @default(20.21) @db.Decimal(10, 2)
+  tipsReceived  Decimal               @default(0) @db.Decimal(10, 2)
+  tipsGiven     Decimal               @default(0) @db.Decimal(10, 2)
+  rating        Decimal               @default(4.21) @db.Decimal(10, 2)
+  credits       Decimal               @default(100) @db.Decimal(10, 2)
   helpOffers    HelpOffer[]
   helpRequests  HelpRequest[]
   languages     UsersToLanguages[]
