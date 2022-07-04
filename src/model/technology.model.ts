@@ -68,7 +68,6 @@ export async function createHelpRequestToTechnologies(helpRequestId: number, tec
 
 export async function deleteHelpRequestFromTechnologies(helpRequestId: number) {
   try {
-    console.log('deleteHelpRequestFromTechnologies', helpRequestId);
     return await prisma.helpRequestsToTech.deleteMany({
       where: {
         helpRequestId: helpRequestId,

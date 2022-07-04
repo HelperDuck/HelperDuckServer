@@ -1,4 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, User } from '@prisma/client';
+import { Decimal } from '@prisma/client/runtime';
 const prisma = new PrismaClient();
 
 export async function findUniqueUser({
@@ -15,12 +16,7 @@ export async function findUniqueUser({
   try {
     const user = await prisma.user.findFirst({
       where: {
-        OR: [
-          { uid: uid },
-          { userName: userName },
-          { email: email },
-          { id: id },
-        ],
+        OR: [{ uid: uid }, { userName: userName }, { email: email }, { id: id }],
       },
       // include: {
       //   helpRequests: true,
@@ -44,7 +40,7 @@ export async function findUserComplete(uid: string) {
       include: {
         technologies: { include: { technology: true } },
         languages: { include: { language: true } },
-        helpOffers: { include: { review: true } },
+        helpOffers: { include: { reviews: true } },
         helpRequests: true,
         reviews: true,
       },
@@ -108,6 +104,63 @@ export async function getAllUsers() {
     return users;
   } catch (err) {
     console.log('Error at Model-getAllUsers', err);
+    return null;
+  }
+}
+
+export async function changeCredits(
+  user: User,
+  mutation: { tipsReceived?: Decimal; tipsGiven?: Decimal; creditsBought?: Decimal }
+) {
+  try {
+    const creditsBought = mutation.creditsBought || new Decimal(0);
+    const tipsReceived = mutation.tipsReceived || new Decimal(0);
+    const tipsGiven = mutation.tipsGiven || new Decimal(0);
+
+    let updatedUser: User | null = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        credits: new Decimal(user.credits).add(creditsBought).add(tipsReceived).minus(tipsGiven),
+        tipsReceived: new Decimal(user.tipsReceived).add(tipsReceived),
+        tipsGiven: new Decimal(user.tipsGiven).add(tipsGiven),
+      },
+    });
+
+    if (new Decimal(tipsGiven).greaterThan(0)) updatedUser = await recalculateAvgTipGiven(updatedUser);
+
+    return updatedUser;
+  } catch (err) {
+    console.log('Error at Model-changeCredits', err);
+    return null;
+  }
+}
+
+async function recalculateAvgTipGiven(user: User) {
+  try {
+    const totalHelpRequests = await prisma.helpRequest.count({
+      where: {
+        userId: user.id,
+
+        status: 'solved',
+      },
+    });
+
+    const avgTipGiven = new Decimal(user.tipsGiven).div(totalHelpRequests);
+
+    const updatedUser = await prisma.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        avgTip: avgTipGiven,
+      },
+    });
+
+    return updatedUser;
+  } catch (err) {
+    console.log('Error at Model-recalculateAvgTipGiven', err);
     return null;
   }
 }

@@ -15,6 +15,7 @@ router.get('/user/:uid', controllers.user.getUser);
 router.post('/user', controllers.user.createNewUser);
 router.delete('/user/:uid', controllers.user.deleteUser);
 router.put('/user/:uid', controllers.user.updateUser);
+router.post('/user/:uid/addCredits', controllers.user.addCredits);
 
 //Update technologies and languages
 router.post('/user/:uid/technologies', controllers.technology.updateUserTechnologies);
@@ -38,10 +39,16 @@ router.post('/helpRequest/:helpRequestId/:helpOfferId/solved', controllers.helpR
 router.get('/helpOffers', controllers.helpOffer.getAllHelpOffers);
 router.get('/findHelpOffers?', controllers.helpOffer.findHelpOffers);
 router.get('/helpOffer/:id', controllers.helpOffer.getHelpOfferById);
-router.post('/helpRequest/:helpRequestId/helpOffer', controllers.helpOffer.createHelpOffer);
+router.post('/helpRequest/:helpRequestId/helpOffer', controllers.helpOffer.createHelpOfferOpen);
+router.post('/helpRequest/:helpRequestId/helpOfferDecline', controllers.helpOffer.createHelpOfferDecline);
 
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept', controllers.helpOffer.acceptHelpOffer);
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline', controllers.helpOffer.declineHelpOffer);
+
+//Review Routes
+router.get('/helpReviews', controllers.helpReview.getallHelpReviews);
+// router.get('/review/:id', controllers.review.getReviewById);
+router.post('/helpReview', controllers.helpReview.createHelpReview);
 
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));

@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import model from '../model/index.models';
+import { Decimal } from '@prisma/client/runtime';
 
 export async function getAllUsers(req: Request, res: Response) {
   const users = await model.user.getAllUsers();
@@ -116,4 +117,22 @@ export async function deleteUser(req: Request, res: Response) {
   if (!deletedUser) return res.status(400).send('Error deleting user');
 
   return res.status(200).send(deletedUser);
+}
+
+export async function addCredits(req: Request, res: Response) {
+  const uid = req.params.uid;
+  if (!uid) return res.status(400).send('No uid provided');
+
+  const user = await model.user.findUniqueUser({ uid });
+  if (!user) return res.status(404).send('User not found');
+
+  const creditsBought = new Decimal(parseInt(req.body.creditsBought));
+  if (!creditsBought) return res.status(400).send('No creditsBought provided');
+
+  if (req.body.superSecret !== 'superSecret') return res.status(400).send('Not authorized');
+
+  const updatedUser = await model.user.changeCredits(user, { creditsBought: creditsBought });
+  if (!updatedUser) return res.status(400).send('Error updating user');
+
+  return res.status(200).send(updatedUser);
 }
