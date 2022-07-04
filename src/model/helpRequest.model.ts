@@ -250,3 +250,50 @@ export async function updateHelpRequestOnDeletion(userId: number) {
     return null;
   }
 }
+
+export async function getHelpRequestsByRoomId(roomId: string) {
+  try {
+    const helpRequest = await prisma.helpRequest.findFirst({
+      where: {
+        roomId: roomId,
+      },
+      include: {
+        user: true,
+        helpOffers: { include: { user: true } },
+      },
+    });
+
+    let helpOfferAccepted: any;
+    if (!helpRequest || !helpRequest.helpOffers) return null;
+    for (const helpOffer of helpRequest.helpOffers) {
+      if (helpOffer.status === 'accepted') {
+        helpOfferAccepted = helpOffer;
+        break;
+      }
+    }
+
+    if (!helpOfferAccepted) {
+      for (const helpOffer of helpRequest.helpOffers) {
+        if (helpOffer.status === 'open') {
+          helpOfferAccepted = helpOffer;
+          break;
+        }
+      }
+    }
+
+    if (!helpOfferAccepted) return null;
+
+    delete helpOfferAccepted.helpRequest;
+    helpRequest.helpOffers = [helpOfferAccepted];
+
+    const helpOfferAndRequest = {
+      helpOffer: helpOfferAccepted,
+      helpRequest: helpRequest,
+    };
+
+    return helpOfferAndRequest;
+  } catch (err) {
+    console.log('Error at Model-getRequestsByRoomId', err);
+    return null;
+  }
+}

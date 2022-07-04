@@ -201,3 +201,14 @@ export async function solvedHelpRequest(req: Request, res: Response) {
 
   return res.status(200).send(helpRequestComplete);
 }
+
+export async function getDataByRoomId(req: Request, res: Response) {
+  const roomId: string = req.params.roomId;
+  if (!roomId) return res.status(400).send('No roomId provided');
+
+  const roomData = await model.helpRequest.getHelpRequestsByRoomId(roomId);
+  if (!roomData) return res.status(400).send('Error getting roomData');
+  if (!roomData.helpOffer) return res.status(404).send('No helpOffer found');
+
+  return res.status(200).send(roomData);
+}
