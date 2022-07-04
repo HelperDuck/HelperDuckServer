@@ -149,9 +149,12 @@ export async function solvedHelpRequest(req: Request, res: Response) {
   const helpOffer = await model.helpOffer.getHelpOfferById(helpOfferId);
   if (!helpRequest || !helpOffer) return res.status(404).send('Request / HelpOffer not found');
 
-  if (helpRequest.status !== 'open') return res.status(400).send('Request is not open');
-  if (helpOffer.status !== 'open' && helpOffer.status !== 'accepted')
-    return res.status(400).send('HelpOffer is not open');
+  if (helpRequest.status !== 'open' && helpRequest.status !== 'accepted') {
+    return res.status(400).send('helpRequest is not open/accepted');
+  }
+  if (helpOffer.status !== 'open' && helpOffer.status !== 'accepted') {
+    return res.status(400).send('HelpOffer is not open/accepted');
+  }
   if (helpRequest.id !== helpOffer.helpRequestId) {
     return res.status(400).send('HelpOffer does not belong to this request');
   }
