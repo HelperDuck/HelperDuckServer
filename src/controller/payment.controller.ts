@@ -15,7 +15,7 @@ const stripe = new Stripe(SUPER_SECRET_KEY, {
   apiVersion: '2020-08-27',
 });
 
-export async function createPayment(req: Request, res: Response) {
+export async function createPayment(req: Request, res: Response): Promise<void> {
   if (req.method === "POST") {
     try {
       const { amount } = req.body;
@@ -32,8 +32,10 @@ export async function createPayment(req: Request, res: Response) {
       });
 
       res.status(200).send(paymentIntent.client_secret);
+      console.log('Payment intent succeeded: ');
     } catch (err) {
       res.status(500).json({ statusCode: 500, message: err });
+      console.log('Payment intent failed: ', err)
     }
   } else {
     res.setHeader("Allow", "POST");
