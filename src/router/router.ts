@@ -45,6 +45,9 @@ router.post('/helpRequest/:helpRequestId/helpOfferDecline', controllers.helpOffe
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept', controllers.helpOffer.acceptHelpOffer);
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline', controllers.helpOffer.declineHelpOffer);
 
+//Get Data by roomId
+router.get('/roomData/:roomId', controllers.helpRequest.getDataByRoomId);
+
 //Review Routes
 router.get('/helpReviews', controllers.helpReview.getallHelpReviews);
 // router.get('/review/:id', controllers.review.getReviewById);
