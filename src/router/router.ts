@@ -45,10 +45,18 @@ router.post('/helpRequest/:helpRequestId/helpOfferDecline', controllers.helpOffe
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept', controllers.helpOffer.acceptHelpOffer);
 router.post('/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline', controllers.helpOffer.declineHelpOffer);
 
+//Get Data by roomId
+router.get('/roomData/:roomId', controllers.helpRequest.getDataByRoomId);
+
 //Review Routes
 router.get('/helpReviews', controllers.helpReview.getallHelpReviews);
 // router.get('/review/:id', controllers.review.getReviewById);
 router.post('/helpReview', controllers.helpReview.createHelpReview);
+
+
+//Payment Routes
+router.post('/payment/create', controllers.payment.createPayment);
+
 
 //route to catch all other routes
 router.get('*', (req, res) => res.status(404).send('404 Not Found'));
