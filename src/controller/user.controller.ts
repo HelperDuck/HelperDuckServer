@@ -120,7 +120,8 @@ export async function deleteUser(req: Request, res: Response) {
 }
 
 export async function addCredits(req: Request, res: Response) {
-  const uid = req.params.uid;
+  console.log(req.params, 'req params at addCredits')
+  const uid = req.params.uid;  
   if (!uid) return res.status(400).send('No uid provided');
 
   const user = await model.user.findUniqueUser({ uid });
