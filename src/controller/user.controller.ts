@@ -44,10 +44,17 @@ export async function updateUser(req: Request, res: Response) {
   //Update technologies
   if (technologies) {
     const deleteTech = await model.technology.deleteUsersToTechnologies(updateRes.id);
-    console.log('deleteTech', deleteTech);
     if (!deleteTech) return res.status(400).send('Error deleting technologies');
     const newTech = await model.technology.createUsersToTechnologies(technologies, updateRes.id);
     if (!newTech) return res.status(400).send('Error creating technologies');
+  }
+
+  //Update languages
+  if (languages) {
+    const deleteLang = await model.language.deleteUsersToLanguages(updateRes.id);
+    if (!deleteLang) return res.status(400).send('Error deleting languages');
+    const newLang = await model.language.createUsersToLanguages(languages, updateRes.id);
+    if (!newLang) return res.status(400).send('Error creating languages');
   }
 
   const newUserData = await model.user.findUserComplete(uid);
@@ -120,6 +127,7 @@ export async function deleteUser(req: Request, res: Response) {
 }
 
 export async function addCredits(req: Request, res: Response) {
+  console.log(req.params, 'req params at addCredits');
   const uid = req.params.uid;
   if (!uid) return res.status(400).send('No uid provided');
 

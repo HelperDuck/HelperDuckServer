@@ -14,6 +14,7 @@ const userData: Prisma.UserCreateInput[] = [
       create: [
         { technology: { connect: { name: 'Java' } } },
         { technology: { connect: { name: 'Python' } } },
+        { technology: { connect: { name: 'JavaScript' } } },
       ],
     },
     languages: {
@@ -32,13 +33,11 @@ const userData: Prisma.UserCreateInput[] = [
       create: [
         { technology: { connect: { name: 'Java' } } },
         { technology: { connect: { name: 'Python' } } },
+        { technology: { connect: { name: 'JavaScript' } } },
       ],
     },
     languages: {
-      create: [
-        { language: { connect: { code: 'en' } } },
-        { language: { connect: { code: 'nl' } } },
-      ],
+      create: [{ language: { connect: { code: 'en' } } }, { language: { connect: { code: 'nl' } } }],
     },
   },
   {
@@ -50,16 +49,10 @@ const userData: Prisma.UserCreateInput[] = [
     userBio: 'Socket guru',
     gitHubProfile: 'Noel',
     technologies: {
-      create: [
-        { technology: { connect: { name: 'JavaScript' } } },
-        { technology: { connect: { name: 'Express' } } },
-      ],
+      create: [{ technology: { connect: { name: 'JavaScript' } } }, { technology: { connect: { name: 'Express' } } }],
     },
     languages: {
-      create: [
-        { language: { connect: { code: 'en' } } },
-        { language: { connect: { code: 'es' } } },
-      ],
+      create: [{ language: { connect: { code: 'en' } } }, { language: { connect: { code: 'es' } } }],
     },
   },
   {
@@ -94,16 +87,10 @@ const userData: Prisma.UserCreateInput[] = [
     userBio: '72 years old dev',
     gitHubProfile: 'https://github.com/scainMauricio',
     technologies: {
-      create: [
-        { technology: { connect: { name: 'JavaScript' } } },
-        { technology: { connect: { name: 'React' } } },
-      ],
+      create: [{ technology: { connect: { name: 'JavaScript' } } }, { technology: { connect: { name: 'React' } } }],
     },
     languages: {
-      create: [
-        { language: { connect: { code: 'en' } } },
-        { language: { connect: { code: 'pt' } } },
-      ],
+      create: [{ language: { connect: { code: 'en' } } }, { language: { connect: { code: 'pt' } } }],
     },
   },
   {
