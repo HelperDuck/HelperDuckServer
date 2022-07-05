@@ -34,7 +34,8 @@ export async function createUsersToLanguages(languages: any, id: number) {
       data: {
         languages: {
           create: languages.map((lang: any) => {
-            return { language: { connect: { code: lang.language.code } } };
+            console.log('lang', lang);
+            return { language: { connect: { name: lang.language.name } } };
           }),
         },
       },
