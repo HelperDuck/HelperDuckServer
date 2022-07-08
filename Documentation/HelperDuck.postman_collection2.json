@@ -1,0 +1,834 @@
+{
+	"info": {
+		"_postman_id": "baaa32fe-b684-4649-b9f4-49095611b353",
+		"name": "HelperDuck",
+		"description": "Here you can find all the possible API calls for the backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "3233465"
+	},
+	"item": [
+		{
+			"name": "Prod",
+			"item": [
+				{
+					"name": "users",
+					"item": [
+						{
+							"name": "get User",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/:uid",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										":uid"
+									],
+									"variable": [
+										{
+											"key": "uid",
+											"value": "hNAtYiQt2tQwMQfffcmyPNZ3OHx2",
+											"description": "test / AfAM70bjo9MHY8bzzD1DIeDhNxP2"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete user",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/user/:uid",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										":uid"
+									],
+									"variable": [
+										{
+											"key": "uid",
+											"value": "xVkbzYVzKKaxUBO2gnJSYje6UD62"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create new user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"uid\": \"mauricio\",\r\n    \"userName\": \"mauricio\",\r\n    \"email\": \"mauricio@mauricio.com\",\r\n    \"firstName\": \"Mauricio\",\r\n    \"lastName\": \"Kylstra\",\r\n    \"userBio\": \"DevOps nerd\",\r\n    \"gitHubProfile\": \"siebekylstra\",\r\n    \"profilePic\": \"https://firebasestorage.googleapis.com/v0/b/helper-duck.appspot.com/o/profilePics%2Fhackercat.jpg?alt=media&token=3cd1ed19-6dd5-47b1-8f19-9da64389cbb8\",\r\n    \"technologies\": [\r\n        {\r\n            \"userId\": 1,\r\n            \"technologyId\": 78,\r\n            \"technology\": {\r\n                \"id\": 78,\r\n                \"name\": \"Python\",\r\n                \"icon\": \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg\"\r\n            }\r\n        },\r\n        {\r\n            \"userId\": 1,\r\n            \"technologyId\": 54,\r\n            \"technology\": {\r\n                \"id\": 54,\r\n                \"name\": \"Java\",\r\n                \"icon\": \"https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg\"\r\n            }\r\n        }\r\n    ],\r\n    \"languages\": [\r\n        {\r\n            \"userId\": 1,\r\n            \"languageId\": 39,\r\n            \"language\": {\r\n                \"id\": 39,\r\n                \"code\": \"nl\",\r\n                \"name\": \"Dutch\",\r\n                \"nativeName\": \"Nederlands, Vlaams\",\r\n                \"icon\": \"https://countryflagsapi.com/png/nl\"\r\n            }\r\n        },\r\n        {\r\n            \"userId\": 1,\r\n            \"languageId\": 40,\r\n            \"language\": {\r\n                \"id\": 40,\r\n                \"code\": \"en\",\r\n                \"name\": \"English\",\r\n                \"nativeName\": \"English\",\r\n                \"icon\": \"https://countryflagsapi.com/png/en\"\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/user/"
+							},
+							"response": []
+						},
+						{
+							"name": "create new User - minimal",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"uid\": \"test30\",\r\n    \"userName\": \"test30\",\r\n    \"email\": \"test30\",\r\n    \"displayName\": \"test30\"\r\n\r\n\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/user/"
+							},
+							"response": []
+						},
+						{
+							"name": "update  User - Technologies",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"technologies\": [\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"Tailwind CSS\"\r\n            }\r\n        },\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"Swift\"\r\n            }\r\n        },\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"Java\"\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/user/test/technologies"
+							},
+							"response": []
+						},
+						{
+							"name": "update user",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userName\": \"testUpdated\",\r\n    \"email\": \"testUpdated\",\r\n    \"firstName\": \"Siebe\",\r\n    \"lastName\": \"Kylstra\",\r\n    \"userBio\": \"DevOps nerd updated\",\r\n    \"technologies\": [\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"JavaScript\"\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/user/test"
+							},
+							"response": []
+						},
+						{
+							"name": "get All users",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/users",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"users"
+									],
+									"query": [
+										{
+											"key": null,
+											"value": " ",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "helpRequests",
+					"item": [
+						{
+							"name": "get All helpRequests",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/helpRequests"
+							},
+							"response": []
+						},
+						{
+							"name": "create new helpRequest - Minimum input",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": 1,\r\n    \"subject\": \"Help with css\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/helpRequest"
+							},
+							"response": []
+						},
+						{
+							"name": "create new helpRequest - Normal input",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": 1,\r\n    \"subject\": \"Help with css\",\r\n    \"description\": \"How to write hello world\",\r\n    \"codeSnippet\": \"console.log(Hello world) \",\r\n    \"linkToSandbox\": \"\",\r\n    \"technologies\": [\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"Next.js\"\r\n            }\r\n        },\r\n        {\r\n            \"technology\": {\r\n                \"name\": \"MySQL\"\r\n            }\r\n        }\r\n    ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/helpRequest"
+							},
+							"response": []
+						},
+						{
+							"name": "get helpRequest by helpRequestID",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/helpRequest/:id",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "17"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "delete helpRequest by helpRequestId",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/helpRequest?helpRequestId=17",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest"
+									],
+									"query": [
+										{
+											"key": "helpRequestId",
+											"value": "17"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "get helpRequests with Query - please test and report bugs",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/findHelpRequest?userUid=jcLzJnBP2mZnKA53NhpYmp3gpkl1&searchType=AND",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"findHelpRequest"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2",
+											"disabled": true
+										},
+										{
+											"key": "userUid",
+											"value": "jcLzJnBP2mZnKA53NhpYmp3gpkl1"
+										},
+										{
+											"key": "userName",
+											"value": "Siebe",
+											"disabled": true
+										},
+										{
+											"key": "technologies",
+											"value": "MySQL, Swift",
+											"description": "Not implemented yet, but would be pretty cool",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "open",
+											"description": "Statusses are: open, solved, accepted, declined. (default is open)",
+											"disabled": true
+										},
+										{
+											"key": "searchType",
+											"value": "AND",
+											"description": "can be OR / AND <- if else will be or statement"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find HelpRequest based on Query",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/findHelpOffers?userId=103&searchType=AND",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"findHelpOffers"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "103"
+										},
+										{
+											"key": "userUid",
+											"value": "test",
+											"disabled": true
+										},
+										{
+											"key": "userName",
+											"value": "Siebe",
+											"disabled": true
+										},
+										{
+											"key": "technologies",
+											"value": "MySQL, Swift",
+											"description": "not implemented",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "open",
+											"description": "Statusses are: open, solved, accepted, declined. (default is open)",
+											"disabled": true
+										},
+										{
+											"key": "searchType",
+											"value": "AND",
+											"description": "for now only AND route is implemented"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "other",
+					"item": [
+						{
+							"name": "Basic request",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}"
+							},
+							"response": []
+						},
+						{
+							"name": "get technologies",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/technologies"
+							},
+							"response": []
+						},
+						{
+							"name": "get Languages",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/Languages"
+							},
+							"response": []
+						},
+						{
+							"name": "find Room Data by roomId",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/roomData/:roomId",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"roomData",
+										":roomId"
+									],
+									"variable": [
+										{
+											"key": "roomId",
+											"value": "9888a6cc-d1d6-4dcb-968b-0a76372d670f"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "helpOffer",
+					"item": [
+						{
+							"name": "get all HelpOffers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/helpOffers"
+							},
+							"response": []
+						},
+						{
+							"name": "get helpOffer by Id",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "{{host}}/helpOffer/2"
+							},
+							"response": []
+						},
+						{
+							"name": "create new helpOffer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/helpRequest/:helpRequestId/helpOffer",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":helpRequestId",
+										"helpOffer"
+									],
+									"variable": [
+										{
+											"key": "helpRequestId",
+											"value": "317"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "accept HelpOffer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/helpRequest/:helpRequestId/helpOffer/:helpOfferId/accept",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":helpRequestId",
+										"helpOffer",
+										":helpOfferId",
+										"accept"
+									],
+									"variable": [
+										{
+											"key": "helpRequestId",
+											"value": "10"
+										},
+										{
+											"key": "helpOfferId",
+											"value": "16"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "decline HelpOffer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/helpRequest/:helpRequestId/helpOffer/:helpOfferId/decline",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":helpRequestId",
+										"helpOffer",
+										":helpOfferId",
+										"decline"
+									],
+									"variable": [
+										{
+											"key": "helpRequestId",
+											"value": "10"
+										},
+										{
+											"key": "helpOfferId",
+											"value": "16"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "find HelpOffer based on Query (For now: user needs to be included)",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{host}}/findHelpOffers?userId=2&status=solved",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"findHelpOffers"
+									],
+									"query": [
+										{
+											"key": "userId",
+											"value": "2"
+										},
+										{
+											"key": "userUid",
+											"value": "test",
+											"disabled": true
+										},
+										{
+											"key": "userName",
+											"value": "Siebe",
+											"disabled": true
+										},
+										{
+											"key": "status",
+											"value": "solved",
+											"description": "Statusses are: open, solved, accepted, declined. (default is open)"
+										},
+										{
+											"key": "technologies",
+											"value": "MySQL, Swift",
+											"description": "Not implemented yet, but would be pretty cool",
+											"disabled": true
+										},
+										{
+											"key": "searchType",
+											"value": "AND",
+											"description": "Not implemented yet, just AND statements",
+											"disabled": true
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "create HelpOffer decline so that user won't see the helpRequest",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"userId\": 2\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/helpRequest/:helpRequestId/helpOfferDecline",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":helpRequestId",
+										"helpOfferDecline"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "helpRequestId",
+											"value": "40"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "reviews",
+					"item": [
+						{
+							"name": "create Review helpRequest",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"rating\": \"4\",\r\n    \"comment\": \"This is a comment\",\r\n    \"userId\": \"1\",\r\n    \"helpRequestId\": \"18\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/helpReview"
+							},
+							"response": []
+						},
+						{
+							"name": "create Review helpOffer",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"rating\": \"4\",\r\n    \"comment\": \"This is a comment\",\r\n    \"userId\": \"2\",\r\n    \"helpOfferId\": \"17\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "{{host}}/helpReview"
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Solving a request",
+					"item": [
+						{
+							"name": "Solve a HelpRequest",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"tipGiven\": 10,\r\n    \"review\": {\r\n        \"rating\": 5,\r\n        \"comment\": \"Super good session\"\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/helpRequest/:helpRequestId/:helpOfferId/solved",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"helpRequest",
+										":helpRequestId",
+										":helpOfferId",
+										"solved"
+									],
+									"query": [
+										{
+											"key": "",
+											"value": null,
+											"disabled": true
+										}
+									],
+									"variable": [
+										{
+											"key": "helpRequestId",
+											"value": "317"
+										},
+										{
+											"key": "helpOfferId",
+											"value": "483"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Credits",
+					"item": [
+						{
+							"name": "Add credits to user",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"creditsBought\": 10,\r\n    \"superSecret\": \"superSecret\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{host}}/user/:uid/addCredits",
+									"host": [
+										"{{host}}"
+									],
+									"path": [
+										"user",
+										":uid",
+										"addCredits"
+									],
+									"variable": [
+										{
+											"key": "uid",
+											"value": "test"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Dev",
+			"item": []
+		},
+		{
+			"name": "Local",
+			"item": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "hostLocal",
+			"value": "http://localhost:3002",
+			"type": "string"
+		},
+		{
+			"key": "hostDev",
+			"value": "https://helperduck-dev.herokuapp.com",
+			"type": "string"
+		},
+		{
+			"key": "hostProd",
+			"value": "https://helperduck.herokuapp.com",
+			"type": "string"
+		},
+		{
+			"key": "host",
+			"value": "http://localhost:3002",
+			"type": "string",
+			"disabled": true
+		}
+	]
+}
