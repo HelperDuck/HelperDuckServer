@@ -1,18 +1,18 @@
 # HelperDuck Server
 
-The backend server for helperDuck.com.
+The backend server for helperDuck.com, the place to find your talking helper duck.
 
 ### Functions:
 
 - Connection to the SQL database (connected through Prisma as ORM)
 - Connect the helpRequester and the helpGiver through socket.io
 
-### Made by:
+### Created by:
 
-Fernanda Rodrigues - github.com/fegananca
-Siebe Kylstra - github.com/siebe88
-Mauricio Scain - github.com/scainMauricio
-Noel Vieira - github.com/noelcv
+- Fernanda Rodrigues - github.com/fegananca
+- Siebe Kylstra - github.com/siebe88
+- Mauricio Scain - github.com/scainMauricio
+- Noel Vieira - github.com/noelcv
 
 Codeworks seniors Barcelona - thesis project July 2022
 
