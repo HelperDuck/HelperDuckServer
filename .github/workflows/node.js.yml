@@ -41,5 +41,6 @@ jobs:
           node-version: 16.x
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - run: npm run build-server
+      - run: npm run build-db-dev
       - run: npm test
