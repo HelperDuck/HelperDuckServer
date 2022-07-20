@@ -6,6 +6,7 @@ The backend server for helperDuck.com, the place to find your talking helper duc
 
 - Connection to the SQL database (connected through Prisma as ORM)
 - Connect the helpRequester and the helpGiver through socket.io
+- Signaling SocketIO Server for WebRTC Video Call application
 
 ### Created by:
 
